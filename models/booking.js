@@ -8,7 +8,7 @@ module.exports = function (sequelize, DataTypes) {
             , "allowNull": false
             , "unique": false
             , "validate": {
-                "isAlpha": true
+                "isEmail": true
             }
         }
         , "roomNumber": {
