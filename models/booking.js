@@ -1,49 +1,45 @@
-var bcrypt = require('bcryptjs');
+var Sequelize = require('sequelize');
 var _ = require('underscore');
 
-module.exports = function (sequlize, DataTypes) {
-    return sequlize.define('user', {
-        "email": {
+module.exports = function (sequelize, DataTypes) {
+    return sequelize.define('booking', {
+        "bookedBy": {
             "type": DataTypes.STRING
             , "allowNull": false
-            , "unique": true
+            , "unique": false
             , "validate": {
-                "isEmail": true
+                "isAlpha": true
             }
         }
-        , "salt": {
-            "type": DataTypes.STRING
-        }
-        , "password_hash": {
-            "type": DataTypes.STRING
-        }
-        , "password": {
-            "type": DataTypes.VIRTUAL
+        , "roomNumber": {
+            "type": DataTypes.INTEGER
             , "allowNull": false
             , "validate": {
-                "len": [7, 100]
-            }
-            , "set": function (value) {
-                var salt = bcrypt.genSaltSync(10);
-                var hashedPassword = bcrypt.hashSync(value, salt);
-
-                this.setDataValue('password', value);
-                this.setDataValue('salt', salt);
-                this.setDataValue('password_hash', hashedPassword);
+                "isNumeric": true
             }
         }
-    }, {
-        "hooks": {
-            "beforeValidate": function (user, options) {
-                if (typeof user.email === 'string') {
-                    user.email = user.email.toLowerCase();
-                }
+        , "bookedAt": {
+            "type": DataTypes.DATE
+            , "allowNull": false
+            , "defaultValue": Sequelize.NOW
+            , "validate": {
+                "isDate": true
             }
         }
-        , "instanceMethods": {
-            toPublicJSON: function () {
-                var json = this.toJSON();
-                return _.pick(json, 'id', 'email', 'createdAt', 'updatedAt');
+        , "startDate": {
+            "type": DataTypes.DATE
+            , "allowNull": false
+            , "defaultValue": Sequelize.NOW
+            , "validate": {
+                "isDate": true
+            }
+        }
+        , "endDate": {
+            "type": DataTypes.DATE
+            , "allowNull": false
+            , "defaultValue": Sequelize.NOW
+            , "validate": {
+                "isDate": true
             }
         }
     });

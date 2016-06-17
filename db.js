@@ -15,9 +15,7 @@ if (env === 'production') {
 }
 
 
-var db = {
-
-};
+var db = {};
 
 // Create the relations for use
 db.userType = sequelize.import(__dirname + '/models/userType.js');
@@ -28,4 +26,9 @@ db.booking = sequelize.import(__dirname + '/models/booking.js');
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
+// Set relationships between tables
+//db.booking.belongsTo(db.user);
+//db.user.hasMany(db.booking);
+
 module.exports = db;

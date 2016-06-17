@@ -1,13 +1,15 @@
 module.exports = function (sequelize, DataTypes) {
-    return sequelize.define('todo', {
-        "description": {
-            "type": DataTypes.STRING
+    return sequelize.define('userType', {
+        "vipStatus": {
+            "type": DataTypes.BOOLEAN
             , "allowNull": false
-            , "validate": {
-                "len": [1, 250]
-            }
         }
-        , "completed": {
+        , "userId": {
+            "type": DataTypes.INTEGER
+            , "unique": true
+            , "allowNull": false
+        }
+        , "frequentUser": {
             "type": DataTypes.BOOLEAN
             , "allowNull": false
             , "defaultValue": false

@@ -2,6 +2,8 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var _ = require('underscore');
 var db = require('./db.js');
+var bcrypt = require('bcryptjs');
+var middleware = require('./middleware.js')(db);
 var app = express();
 var PORT = process.env.PORT || 3000;
 var todos = [];
@@ -13,16 +15,16 @@ app.get('/', function (req, res) {
 
 app.use(bodyParser.json());
 
-/* Get individual todo */
-app.get('/todos/:id', function (req, res) {
-    var todoId = parseInt(req.params.id, 10);
+/* Get individual booking */
+app.get('/bookings/:id', middleware.requireAuthentication, function (req, res) {
+    var bookingId = parseInt(req.params.id, 10);
 
-    db.todo.findById(todoId).then(function (todo) {
-        if (!_.isNull(todo)) {
-            res.json(todo);
+    db.booking.findById(bookingId).then(function (booking) {
+        if (!_.isNull(booking)) {
+            res.json(booking);
         } else {
             res.status(404).json({
-                "error": 'No todo found with that id.'
+                "error": 'No booking found with that id.'
             });
         }
 
@@ -31,38 +33,45 @@ app.get('/todos/:id', function (req, res) {
     });
 });
 
-/* Get all todos */
-app.get('/todos', function (req, res) {
+/* Get all bookings */
+app.get('/bookings', middleware.requireAuthentication,  function (req, res) {
     var query = req.query;
     var where = {};
-
-    if (query.hasOwnProperty('completed') && query.completed === 'true') {
-        where.completed = true;
-    } else if (query.hasOwnProperty('completed') && query.completed === 'false') {
-        where.completed = false;
+    
+    if (query.hasOwnProperty('bookedBy')) {
+        where.bookedBy = query.bookedBy;
+    }
+    if (query.hasOwnProperty('roomNumber')) {
+        where.roomNumber = query.roomNumber;
+    }
+    if (query.hasOwnProperty('endDate')) {
+        where.endDate = query.endDate;
+    }
+    if (query.hasOwnProperty('startDate')) {
+        where.startDate = query.StartDate;
     }
 
-    if (query.hasOwnProperty('q') && query.q.length > 0) {
+/*    if (query.hasOwnProperty('q') && query.q.length > 0) {
         where.description = {
             "$like": '%' + query.q + '%'
         };
-    }
+    }*/
 
-    db.todo.findAll({
+    db.booking.findAll({
         "where": where
-    }).then(function (todos) {
-        res.json(todos);
+    }).then(function (bookings) {
+        res.json(bookings);
     }).catch(function (err) {
         res.status(500).send(err);
     });
 });
 
-/* POST Create new todo*/
-app.post('/todos', function (req, res) {
-    var body = _.pick(req.body, 'description', 'completed');
+/* POST Create new booking*/
+app.post('/bookings', middleware.requireAuthentication,  function (req, res) {
+    var body = _.pick(req.body, 'endDate', 'startDate', 'bookedAt', 'bookedBy', 'roomNumber');
 
-    db.todo.create(body).then(function (todo) {
-        res.json(todo.toJSON());
+    db.booking.create(body).then(function (booking) {
+        res.json(booking.toJSON());
     }).catch(function (err) {
         res.status(400).json(err);
     });
@@ -70,14 +79,13 @@ app.post('/todos', function (req, res) {
 
 
 /* DELETE a todo */
-app.delete('/todos/:id', function (req, res) {
-    var todoId = parseInt(req.params.id, 10);
-    var matchedTodo;
+app.delete('/bookings/:id', middleware.requireAuthentication,  function (req, res) {
+    var bookingId = parseInt(req.params.id, 10);
 
     /* Find the ID to be Destroyed, destroy it */
-    db.todo.destroy({
+    db.booking.destroy({
         "where": {
-            "id": todoId
+            "id": bookingId
         }
     }).then(function (rowsDeleted) {
         if (rowsDeleted === 0) {
@@ -92,11 +100,11 @@ app.delete('/todos/:id', function (req, res) {
     });
 });
 
-/* PUT */
-app.put('/todos/:id', function (req, res) {
-    var body = _.pick(req.body, 'description', 'completed');
+/* PUT updates a specific booking*/
+app.put('/bookings/:id', middleware.requireAuthentication,  function (req, res) {
+    var body = _.pick(req.body, 'endDate', 'startDate', 'bookedAt', 'bookedBy', 'roomNumber');
     var attributes = {};
-    var todoId = parseInt(req.params.id, 10);
+    var bookingId = parseInt(req.params.id, 10);
 
 
     /* Validate the completed status */
@@ -127,7 +135,7 @@ app.put('/todos/:id', function (req, res) {
 
 /* POST users */
 app.post('/users', function (req, res) {
-    var body = _.pick(req.body, 'email', 'password');
+    var body = _.pick(req.body, 'email', 'password', 'firstName', 'lastName', 'dateOfBirth');
     
     db.user.create(body).then(function (user) {
         res.json(user.toPublicJSON());
@@ -136,8 +144,25 @@ app.post('/users', function (req, res) {
     });
 });
 
+/* POST login users */
+app.post('/users/login', function (req, res) {
+    var body = _.pick(req.body, 'email', 'password');
+
+    db.user.authenticate(body).then(function(user) {
+        var token = user.generateToken('authentication');
+        if (!_.isNull(token)) {
+            res.header('Auth', token).json(user.toPublicJSON());
+        } else {
+            res.status(401).send();
+        }
+        
+    }, function (err) {
+        res.status(401).send();
+    });
+});
+
 // Sync the database
-db.sequelize.sync().then(function () {
+db.sequelize.sync({force: true}).then(function () {
     app.listen(PORT, function () {
         console.log('Express listening on port ' + PORT);
     });

@@ -1,8 +1,7 @@
-var bcrypt = require('bcryptjs');
 var _ = require('underscore');
 
-module.exports = function (sequlize, DataTypes) {
-    return sequlize.define('room', {
+module.exports = function (sequelize, DataTypes) {
+    return sequelize.define('room', {
         "roomNumber": {
             "type": DataTypes.INTEGER
             , "allowNull": false
@@ -34,20 +33,5 @@ module.exports = function (sequlize, DataTypes) {
                 "isNumeric": true
             }
         }
-        /*, "password": {
-            "type": DataTypes.VIRTUAL
-            , "allowNull": false
-            , "validate": {
-                "len": [7, 100]
-            }
-            , "set": function (value) {
-                var salt = bcrypt.genSaltSync(10);
-                var hashedPassword = bcrypt.hashSync(value, salt);
-
-                this.setDataValue('password', value);
-                this.setDataValue('salt', salt);
-                this.setDataValue('password_hash', hashedPassword);
-            }
-        }*/
-    }
+    })
 };

@@ -5,7 +5,7 @@ module.exports = function (sequelize, DataTypes) {
             , "allowNull": false
             , "defaultValue": false
             , "validate": {
-                "isBoolean": true
+                "isNumeric": true
             }
         }
         , "numBath": {
