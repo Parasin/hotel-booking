@@ -1,0 +1,18 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jun 18, 2016, 2:54:36 PM
+    Author     : Daniel Dang
+*/
+
+.navbar-default{
+    background-color:#F9CD23;
+}
+
+.navbar-default .navbar-nav > li > li a{
+    color: #122AE6;
+    font-family: Josefin Slab;
+}
