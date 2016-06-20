@@ -6,17 +6,17 @@ var bcrypt = require('bcryptjs');
 var middleware = require('./middleware.js')(db);
 var app = express();
 var PORT = process.env.PORT || 3000;
-var todos = [];
-var todoNextId = 1;
+var bookings = [];
+var bookingsNextId = 1;
 
 app.get('/', function (req, res) {
-    res.send('Todo API root');
+    res.send('Booking API root');
 });
 
 app.use(bodyParser.json());
 
 /* Get individual booking */
-app.get('/bookings/:id', middleware.requireAuthentication, function (req, res) {
+app.get('/bookings/user/:id', middleware.requireAuthentication, function (req, res) {
     var bookingId = parseInt(req.params.id, 10);
 
     db.booking.findById(bookingId).then(function (booking) {
@@ -33,13 +33,12 @@ app.get('/bookings/:id', middleware.requireAuthentication, function (req, res) {
     });
 });
 
-/* Get all bookings */
+/* GET all available bookings 
+TODO: Need to update to show all rooms that are not booked. */
 app.get('/bookings', middleware.requireAuthentication,  function (req, res) {
-    var query = req.query;
+    var query = _.pick(req.query, 'endDate', 'startDate', 'availability', 'roomNumber');
     var where = {};
     
-    where.bookedBy = req.user.email;
-    console.log(req.user.toJSON());
     if (query.hasOwnProperty('roomNumber')) {
         where.roomNumber = query.roomNumber;
     }
@@ -49,12 +48,12 @@ app.get('/bookings', middleware.requireAuthentication,  function (req, res) {
     if (query.hasOwnProperty('startDate')) {
         where.startDate = query.StartDate;
     }
+    if (query.hasOwnProperty('availability')) {
+        where.availability = query.availability;
+    } else {
+        where.availability = 'Available';
+    }
 
-/*    if (query.hasOwnProperty('q') && query.q.length > 0) {
-        where.description = {
-            "$like": '%' + query.q + '%'
-        };
-    }*/
 
     db.booking.findAll({
         "where": where
@@ -65,19 +64,75 @@ app.get('/bookings', middleware.requireAuthentication,  function (req, res) {
     });
 });
 
-/* POST Create new booking*/
-app.post('/bookings', middleware.requireAuthentication,  function (req, res) {
-    var body = _.pick(req.body, 'endDate', 'startDate', 'bookedAt', 'bookedBy', 'roomNumber');
+/* GET all user bookings */
+app.get('/bookings/user', middleware.requireAuthentication,  function (req, res) {
+    var query = _.pick(req.query, 'endDate', 'startDate', 'availability', 'roomNumber');
+    var where = {};
+    
+    where.bookedBy = req.user.email;
+    
+    if (query.hasOwnProperty('roomNumber')) {
+        where.roomNumber = query.roomNumber;
+    }
+    if (query.hasOwnProperty('endDate')) {
+        where.endDate = query.endDate;
+    }
+    if (query.hasOwnProperty('startDate')) {
+        where.startDate = query.StartDate;
+    }
 
-    db.booking.create(body).then(function (booking) {
-        res.json(booking.toJSON());
+
+    db.booking.findAll({
+        "where": where
+    }).then(function (bookings) {
+        res.json(bookings);
     }).catch(function (err) {
-        res.status(400).json(err);
+        res.status(500).send(err);
     });
 });
 
+/* POST Create new booking */
+app.post('/bookings', middleware.requireAuthentication,  function (req, res) {
+    var body = _.pick(req.body, 'endDate', 'startDate', 'bookedAt', 'roomNumber');
+        
+    db.booking.findOne({
+        "where": {
+            "roomNumber": body.roomNumber
+            , "startDate": {
+                "$or": {
+                    $notBetween: [body.startDate, body.endDate]
+                }
+                
+            }
+            , "endDate": {
+                "$or": {
+                    $notBetween: [body.startDate, body.endDate]
+                }
+            }
+        }
+    }).then(function (booking) {
+        if (!_.isNull(booking)) {
+            res.status(403).json({error: 'Room unavailable for requested time'});
+        } else {
+            console.log(req.user.toJSON());
+            body.bookedBy = req.user.email;
+            body.userId = req.user.id;
+            body.availability = 'Unavailable';
+            db.booking.create(body).then(function (booking) {
+                booking = _.pick(booking, 'bookedAt', 'startDate', 'endDate', 'bookedBy', 'availability', 'roomNumber');
+                res.json(booking.toJSON());
+            }, function (err) {
+                return res.status(400).json(err);
+            });
+            
+        }
+    }, function (err) {
+        res.status(500).send();
+    })
+});
 
-/* DELETE a todo */
+
+/* DELETE a booking */
 app.delete('/bookings/:id', middleware.requireAuthentication,  function (req, res) {
     var bookingId = parseInt(req.params.id, 10);
 
@@ -89,7 +144,7 @@ app.delete('/bookings/:id', middleware.requireAuthentication,  function (req, re
     }).then(function (rowsDeleted) {
         if (rowsDeleted === 0) {
             res.status(404).json({
-                "error": "Todo not found"
+                "error": "Booking not found"
             });
         } else {
             res.status(204).send();
@@ -122,15 +177,15 @@ app.put('/bookings/:id', middleware.requireAuthentication,  function (req, res) 
     db.booking.findById(bookingId).then(function (booking) {
         if (!_.isNull(booking)) {
             booking.update(attributes).then(function (booking) {
-                res.json(todo.toJSON());
+                res.json(booking.toJSON());
             }, function (e) {
                 res.status(400).json(e);
             });
         } else {
             res.status(404).send();
         }
-    }, function () {
-        res.status(500).send();
+    }, function (err) {
+        res.status(500).json(err);
     });
 });
 

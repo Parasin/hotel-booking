@@ -42,5 +42,20 @@ module.exports = function (sequelize, DataTypes) {
                 "isDate": true
             }
         }
+        , "availability": {
+            "type": DataTypes.STRING
+            , "allowNull": false
+            , "defaultValue": 'Available'
+            , "validate": {
+                "isAlpha": true
+            }
+        }
+        , "userId": {
+            "type": DataTypes.INTEGER
+            , "allowNull": false
+            , "validate": {
+                "isNumeric": true
+            }
+        }
     });
 };
