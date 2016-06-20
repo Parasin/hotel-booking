@@ -38,9 +38,8 @@ app.get('/bookings', middleware.requireAuthentication,  function (req, res) {
     var query = req.query;
     var where = {};
     
-    if (query.hasOwnProperty('bookedBy')) {
-        where.bookedBy = query.bookedBy;
-    }
+    where.bookedBy = req.user.email;
+    console.log(req.user.toJSON());
     if (query.hasOwnProperty('roomNumber')) {
         where.roomNumber = query.roomNumber;
     }
@@ -106,20 +105,23 @@ app.put('/bookings/:id', middleware.requireAuthentication,  function (req, res) 
     var attributes = {};
     var bookingId = parseInt(req.params.id, 10);
 
-
-    /* Validate the completed status */
-    if (body.hasOwnProperty('completed')) {
-        attributes.completed = body.completed;
+    if (query.hasOwnProperty('roomNumber')) {
+        attributes.roomNumber = body.roomNumber;
+    }
+    if (query.hasOwnProperty('bookedBy')) {
+        attributes.bookedBy = body.bookedBy;
+    }
+    
+    if (query.hasOwnProperty('endDate')) {
+        attributes.endDate = body.endDate;
+    }
+    if (query.hasOwnProperty('startDate')) {
+        attributes.startDate = body.StartDate;
     }
 
-    /* Validate the description */
-    if (body.hasOwnProperty('description')) {
-        attributes.description = body.description;
-    }
-
-    db.todo.findById(todoId).then(function (todo) {
-        if (!_.isNull(todo)) {
-            todo.update(attributes).then(function (todo) {
+    db.booking.findById(bookingId).then(function (booking) {
+        if (!_.isNull(booking)) {
+            booking.update(attributes).then(function (booking) {
                 res.json(todo.toJSON());
             }, function (e) {
                 res.status(400).json(e);
@@ -162,7 +164,7 @@ app.post('/users/login', function (req, res) {
 });
 
 // Sync the database
-db.sequelize.sync({force: true}).then(function () {
+db.sequelize.sync(/*{force: true}*/).then(function () {
     app.listen(PORT, function () {
         console.log('Express listening on port ' + PORT);
     });
