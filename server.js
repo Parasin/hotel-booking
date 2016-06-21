@@ -6,8 +6,8 @@ var bcrypt = require('bcryptjs');
 var middleware = require('./middleware.js')(db);
 var app = express();
 var PORT = process.env.PORT || 3000;
-var bookings = [];
-var bookingsNextId = 1;
+
+app.use(express.static(path.join(__dirname, 'html_css_files')));
 
 app.get('/', function (req, res) {
     res.send('Booking API root');
