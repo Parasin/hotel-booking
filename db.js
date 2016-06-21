@@ -33,7 +33,5 @@ db.room.belongsTo(db.booking);
 db.userType.belongsTo(db.user);
 db.booking.belongsTo(db.user);
 db.user.hasMany(db.booking);
-//db.booking.belongsTo(db.user);
-//db.user.hasMany(db.booking);
 
 module.exports = db;

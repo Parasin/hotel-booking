@@ -35,10 +35,10 @@ app.get('/bookings/user/:id', middleware.requireAuthentication, function (req, r
 
 /* GET all available bookings 
 TODO: Need to update to show all rooms that are not booked. */
-app.get('/bookings', middleware.requireAuthentication,  function (req, res) {
+app.get('/bookings', middleware.requireAuthentication, function (req, res) {
     var query = _.pick(req.query, 'endDate', 'startDate', 'availability', 'roomNumber');
     var where = {};
-    
+
     if (query.hasOwnProperty('roomNumber')) {
         where.roomNumber = query.roomNumber;
     }
@@ -65,12 +65,12 @@ app.get('/bookings', middleware.requireAuthentication,  function (req, res) {
 });
 
 /* GET all user bookings */
-app.get('/bookings/user', middleware.requireAuthentication,  function (req, res) {
+app.get('/bookings/user', middleware.requireAuthentication, function (req, res) {
     var query = _.pick(req.query, 'endDate', 'startDate', 'availability', 'roomNumber');
     var where = {};
-    
+
     where.bookedBy = req.user.email;
-    
+
     if (query.hasOwnProperty('roomNumber')) {
         where.roomNumber = query.roomNumber;
     }
@@ -92,48 +92,28 @@ app.get('/bookings/user', middleware.requireAuthentication,  function (req, res)
 });
 
 /* POST Create new booking */
-app.post('/bookings', middleware.requireAuthentication,  function (req, res) {
+app.post('/bookings', middleware.requireAuthentication, function (req, res) {
     var body = _.pick(req.body, 'endDate', 'startDate', 'bookedAt', 'roomNumber');
-        
-    db.booking.findOne({
-        "where": {
-            "roomNumber": body.roomNumber
-            , "startDate": {
-                "$or": {
-                    $notBetween: [body.startDate, body.endDate]
-                }
-                
-            }
-            , "endDate": {
-                "$or": {
-                    $notBetween: [body.startDate, body.endDate]
-                }
-            }
-        }
-    }).then(function (booking) {
-        if (!_.isNull(booking)) {
-            res.status(403).json({error: 'Room unavailable for requested time'});
-        } else {
-            console.log(req.user.toJSON());
-            body.bookedBy = req.user.email;
-            body.userId = req.user.id;
-            body.availability = 'Unavailable';
-            db.booking.create(body).then(function (booking) {
-                booking = _.pick(booking, 'bookedAt', 'startDate', 'endDate', 'bookedBy', 'availability', 'roomNumber');
-                res.json(booking.toJSON());
-            }, function (err) {
-                return res.status(400).json(err);
-            });
-            
-        }
+    body.bookedBy = req.user.email;
+    body.userId = req.user.id;
+    body.availability = 'Unavailable';
+
+    /* See if the room is booked in our time range */
+    db.booking.checkAvailability(body).then(function (bookings) {
+        db.booking.create(body).then(function (booking) {
+            booking = _.pick(booking, 'bookedAt', 'startDate', 'endDate', 'bookedBy', 'availability', 'roomNumber');
+            res.json(booking);
+        }, function (err) {
+            return res.status(400).json(err);
+        });        
     }, function (err) {
-        res.status(500).send();
+        res.status(404).json(err);
     })
 });
 
 
 /* DELETE a booking */
-app.delete('/bookings/:id', middleware.requireAuthentication,  function (req, res) {
+app.delete('/bookings/:id', middleware.requireAuthentication, function (req, res) {
     var bookingId = parseInt(req.params.id, 10);
 
     /* Find the ID to be Destroyed, destroy it */
@@ -155,7 +135,7 @@ app.delete('/bookings/:id', middleware.requireAuthentication,  function (req, re
 });
 
 /* PUT updates a specific booking*/
-app.put('/bookings/:id', middleware.requireAuthentication,  function (req, res) {
+app.put('/bookings/:id', middleware.requireAuthentication, function (req, res) {
     var body = _.pick(req.body, 'endDate', 'startDate', 'bookedAt', 'bookedBy', 'roomNumber');
     var attributes = {};
     var bookingId = parseInt(req.params.id, 10);
@@ -166,7 +146,7 @@ app.put('/bookings/:id', middleware.requireAuthentication,  function (req, res) 
     if (query.hasOwnProperty('bookedBy')) {
         attributes.bookedBy = body.bookedBy;
     }
-    
+
     if (query.hasOwnProperty('endDate')) {
         attributes.endDate = body.endDate;
     }
@@ -193,7 +173,7 @@ app.put('/bookings/:id', middleware.requireAuthentication,  function (req, res) 
 /* POST users */
 app.post('/users', function (req, res) {
     var body = _.pick(req.body, 'email', 'password', 'firstName', 'lastName', 'dateOfBirth');
-    
+
     db.user.create(body).then(function (user) {
         res.json(user.toPublicJSON());
     }).catch(function (err) {
@@ -205,21 +185,21 @@ app.post('/users', function (req, res) {
 app.post('/users/login', function (req, res) {
     var body = _.pick(req.body, 'email', 'password');
 
-    db.user.authenticate(body).then(function(user) {
+    db.user.authenticate(body).then(function (user) {
         var token = user.generateToken('authentication');
         if (!_.isNull(token)) {
             res.header('Auth', token).json(user.toPublicJSON());
         } else {
             res.status(401).send();
         }
-        
+
     }, function (err) {
         res.status(401).send();
     });
 });
 
 // Sync the database
-db.sequelize.sync(/*{force: true}*/).then(function () {
+db.sequelize.sync( {force: true} ).then(function () {
     app.listen(PORT, function () {
         console.log('Express listening on port ' + PORT);
     });
