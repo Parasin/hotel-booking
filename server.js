@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var _ = require('underscore');
 var db = require('./db.js');
 var bcrypt = require('bcryptjs');
+var path = require('path');
 var middleware = require('./middleware.js')(db);
 var app = express();
 var PORT = process.env.PORT || 3000;
@@ -19,7 +20,12 @@ app.use(bodyParser.json());
 app.get('/bookings/user/:id', middleware.requireAuthentication, function (req, res) {
     var bookingId = parseInt(req.params.id, 10);
 
-    db.booking.findById(bookingId).then(function (booking) {
+    db.booking.findByOne({
+        "where": {
+            id: bookingId
+            , userId: req.user.get('id')
+        }
+    }).then(function (booking) {
         if (!_.isNull(booking)) {
             res.json(booking);
         } else {
@@ -69,7 +75,7 @@ app.get('/bookings/user', middleware.requireAuthentication, function (req, res) 
     var query = _.pick(req.query, 'endDate', 'startDate', 'availability', 'roomNumber');
     var where = {};
 
-    where.bookedBy = req.user.email;
+    where.userId = req.user.get('id');
 
     if (query.hasOwnProperty('roomNumber')) {
         where.roomNumber = query.roomNumber;
@@ -95,7 +101,7 @@ app.get('/bookings/user', middleware.requireAuthentication, function (req, res) 
 app.post('/bookings', middleware.requireAuthentication, function (req, res) {
     var body = _.pick(req.body, 'endDate', 'startDate', 'bookedAt', 'roomNumber');
     body.bookedBy = req.user.email;
-    body.userId = req.user.id;
+    body.userId = req.user.get('id');
     body.availability = 'Unavailable';
 
     /* See if the room is booked in our time range */
@@ -120,6 +126,7 @@ app.delete('/bookings/:id', middleware.requireAuthentication, function (req, res
     db.booking.destroy({
         "where": {
             "id": bookingId
+            , "userId": req.user.get('id')
         }
     }).then(function (rowsDeleted) {
         if (rowsDeleted === 0) {
@@ -154,7 +161,12 @@ app.put('/bookings/:id', middleware.requireAuthentication, function (req, res) {
         attributes.startDate = body.StartDate;
     }
 
-    db.booking.findById(bookingId).then(function (booking) {
+    db.booking.findByOne({
+        "where": {
+            "id": bookingId
+            , "userId": req.user.get('id')
+        }
+    }).then(function (booking) {
         if (!_.isNull(booking)) {
             booking.update(attributes).then(function (booking) {
                 res.json(booking.toJSON());
