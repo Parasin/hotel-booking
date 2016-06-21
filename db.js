@@ -23,7 +23,7 @@ db.user = sequelize.import(__dirname + '/models/user.js');
 db.roomType = sequelize.import(__dirname + '/models/roomType.js');
 db.room = sequelize.import(__dirname + '/models/room.js');
 db.booking = sequelize.import(__dirname + '/models/booking.js');
-
+db.token = sequelize.import(__dirname + '/models/token.js');
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
