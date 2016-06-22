@@ -10,4 +10,7 @@ app.controller('loginController', ['$scope', '$resource', '$location', 'authenti
     $scope.dateOfBirth;
     $scope.firstName;
     $scope.lastName;
+    $scope.login = function ($scope.credentials) {
+        
+    }
 }]);

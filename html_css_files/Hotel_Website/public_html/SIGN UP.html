@@ -55,13 +55,13 @@ and open the template in the editor.
         </div>
         
         <div id="signup_layout">
-            <form name="loginForm" ng-controller="loginController" ng-submit="login(credentials)" novalidate>
+            <form name="loginForm" ng-controller="loginController" novalidate>
                 <div class="row">
                     <div class="col-md-1 col-md-offset-4">
                         <label for="usrName">Username:</label>
                     </div>
                     <div class="col-md-2">
-                        <input type="text" class="form-control" id="usrName">
+                        <input type="text" class="form-control" id="usrName" ng-model="userName" required>
                     </div>
                 </div>
                 <div class="row">
@@ -69,7 +69,7 @@ and open the template in the editor.
                         <label for="pwd">Password:</label>
                     </div>
                     <div class="col-md-2">
-                        <input type="text" class="form-control" id="pwd">
+                        <input type="text" class="form-control" id="pwd" ng-model="password" required>
                     </div>
                 </div>
                 <div class="row">
@@ -77,7 +77,7 @@ and open the template in the editor.
                         <label for="pwdConfirm">Confirm Password:</label>
                     </div>
                     <div class="col-md-2">
-                        <input type="text" class="form-control" id="pwdConfirm">
+                        <input type="text" class="form-control" id="pwdConfirm" ng-model="confirmPassword" required>
                     </div>
                 </div>
                 <div class="row">
@@ -85,7 +85,7 @@ and open the template in the editor.
                         <label for="dob">Date of Birth:</label>
                     </div>
                     <div class="col-md-2">
-                        <input type="text" class="form-control" id="dob">
+                        <input type="text" class="form-control" id="dob" ng-model="dateOfBirth" required>
                     </div>
                 </div>
                 <div class="row">
@@ -93,7 +93,7 @@ and open the template in the editor.
                         <label for="fstName">First name:</label>
                     </div>
                     <div class="col-md-2">
-                        <input type="text" class="form-control" id="fstName">
+                        <input type="text" class="form-control" id="fstName" ng-model="firstName" required>
                     </div>
                 </div>
                 <div class="row">
@@ -101,12 +101,12 @@ and open the template in the editor.
                         <label for="lstName">Last name:</label>
                     </div>
                     <div class="col-md-2">
-                        <input type="text" class="form-control" id="lstName">
+                        <input type="text" class="form-control" id="lstName" ng-model="lastName" required>
                     </div>
                 </div>
                 <div class="row" id="btn">
                     <div class="col-md-2 col-md-offset-5">
-                        <button class="btn btn-primary btn-block" id="signUpBtn">Sign Up</button>
+                        <button class="btn btn-primary btn-block" id="signUpBtn" ng-click="login(credentials)" >Sign Up</button>
                     </div>
                 </div>
             </form>
