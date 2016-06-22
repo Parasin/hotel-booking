@@ -1,11 +1,11 @@
 var app = angular.module('bookingApp');
 
-app.factory('authFactory', ['$q', '$timeout', '$http', function ($q, $timeout, $http) {
-    var user = null;
+app.factory('authFactory', ['$q', '$timeout', '$http', '$cookies', function ($q, $timeout, $http, $cookies) {
+    var user = false;
     var factory = {};
 
     factory.isLoggedIn = function () {
-        if (user) {
+        if (user.status) {
             return true;
         } else {
             return false;
@@ -13,7 +13,7 @@ app.factory('authFactory', ['$q', '$timeout', '$http', function ($q, $timeout, $
     };
 
     factory.getUserStatus = function () {
-        return user;
+        return user.status;
     };
 
     factory.login = function (email, password) {
@@ -26,18 +26,23 @@ app.factory('authFactory', ['$q', '$timeout', '$http', function ($q, $timeout, $
         // send a post request to the server
         $http.post('/users/login', data)
             // handle success
-            .success(function (data, status) {
+            .success(function (data, status, headers) {
                 if (status === 200) {
                     user = true;
+                    //console.log('HEADERS: ' + headers);
+                    $cookies.put('Auth', headers('Auth'));
+                    $cookies.put('email', data.email);
                     deferred.resolve(data);
                 } else {
                     user = false;
+                    console.log(data); 
                     deferred.reject(data);
                 }
             })
             // handle error
             .error(function (data) {
                 user = false;
+                
                 deferred.reject(data);
             });
 
@@ -49,16 +54,26 @@ app.factory('authFactory', ['$q', '$timeout', '$http', function ($q, $timeout, $
 
         // create a new instance of deferred
         var deferred = $q.defer();
-
+        
+        var config = {
+            headers: {
+                'Content-type': 'application/json'
+                , 'Auth': $cookies.get('Auth')
+            }
+        };
+        
         // send a get request to the server
-        $http.delete('/users/login')
+        $http.delete('/users/login', config)
             // handle success
-            .success(function (data) {
+            .success(function (data, status, headers) {
+                $cookies.remove('Auth');
+                $cookies.remove('email');
                 user = false;
                 deferred.resolve(data);
             })
             // handle error
-            .error(function (data) {
+            .error(function (data, status, headers) {
+                console.log('Data: ' + data + ' Status: ' + status + ' Headers: ' + JSON.stringify(headers));
                 user = false;
                 deferred.reject(data);
             });
@@ -76,7 +91,7 @@ app.factory('authFactory', ['$q', '$timeout', '$http', function ($q, $timeout, $
         $http.post('/users', data)
             // handle success
             .success(function (data, status) {
-                if (status === 200) {
+                if (status === 200 || status === 204) {
                     deferred.resolve(data);
                 } else {
                     deferred.reject(data);

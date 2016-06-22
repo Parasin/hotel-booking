@@ -1,7 +1,7 @@
-<div class="col-xs-6 col-xs-offset-3">
+<div class="col-xs-6 col-xs-offset-3" ng-controller="loginController">
     <h2>Login</h2>
     <hr/>
-    <div ng-show="error" class="alert alert-danger">{{errorMessage}}</div>
+    <div ng-show="error" class="alert alert-danger"><p>{{errorMessage}}</p></div>
     <form class="form" ng-controller="loginController" ng-submit="login()">
         <div class="input-group">
             <label class="input-group-addon">Email&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>

@@ -11,29 +11,37 @@ app.controller('navController',
 }]);
 
 /* Login controller */
-app.controller('loginController', ['$scope', '$location', 'authFactory'
-  , function ($scope, $location, authFactory) {
+app.controller('loginController', ['$scope', '$location', 'authFactory', '$cookies'
+  , function ($scope, $location, authFactory, $cookies) {
+        $scope.error;
+        $scope.errorMessage;
         $scope.login = function () {
-
+            //console.log('\n\nLogin with cookie: ' + $cookies.get('Auth') + '\n\n')
+            if ($cookies.get('Auth')) {
+                $location.path('#/');
+            }
             // initial values
             $scope.error = false;
-            $scope.disabled = true;
 
             // call login from service
-            authFactory.login($scope.loginForm.email, $scope.loginForm.password)
+            $scope.$watch('errorMessage', function() {
+                authFactory.login($scope.loginForm.email, $scope.loginForm.password)
                 // handle success
                 .then(function () {
-                    $location.path('#/');
-                    $scope.disabled = false;
+                    $scope.error = false;
+                    $scope.errorMessage = '';
                     $scope.loginForm = {};
-                })
-                // handle error
-                .catch(function () {
+                    $location.path('#/');
+                }, function(err) {
                     $scope.error = true;
                     $scope.errorMessage = "Invalid username and/or password";
-                    $scope.disabled = false;
+                    console.log($scope.errorMessage);
+                }).catch(function () {
+                    $scope.error = true;
+                    $scope.errorMessage = "Account does not exist with that email.";
                     $scope.loginForm = {};
                 });
+            }, true);
         };
 }]);
 
@@ -99,8 +107,8 @@ app.controller('logoutController', ['$scope', '$location', 'authFactory'
 
             // call logout from service
             authFactory.logout()
-                .then(function () {
-                    $location.path('/login');
-                });
+                .then(function (data) {
+                }, function (err) {
+            });
         };
 }]);
