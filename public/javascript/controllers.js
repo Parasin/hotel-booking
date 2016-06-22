@@ -15,11 +15,12 @@ app.controller('loginController', ['$scope', '$location', 'authFactory', '$cooki
   , function ($scope, $location, authFactory, $cookies) {
         $scope.error;
         $scope.errorMessage;
+        if (authFactory.user) {
+            $location.path('#/');
+        }
         $scope.login = function () {
             //console.log('\n\nLogin with cookie: ' + $cookies.get('Auth') + '\n\n')
-            if ($cookies.get('Auth')) {
-                $location.path('#/');
-            }
+            
             // initial values
             $scope.error = false;
 

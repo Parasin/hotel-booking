@@ -195,10 +195,8 @@ app.post('/users', function (req, res) {
 
 /* POST login users */
 app.post('/users/login', function (req, res) {
-    //console.log('\n\nin login\n\n');
     var body = _.pick(req.body, 'email', 'password');
     var userInstance;
-    //console.log(JSON.stringify(body));
     db.user.authenticate(body).then(function (user) {
         var token = user.generateToken('authentication');
         userInstance = user;
@@ -216,8 +214,6 @@ app.post('/users/login', function (req, res) {
 
 /* DELETE /users/login */
 app.delete('/users/login', middleware.requireAuthentication, function (req, res) {
-    //console.log('\n\n\nIn delete request: '+ req + '\n\n\n');
-    
     req.token.destroy().then(function () {
         res.status(204).send();
     }).catch(function (err) {
@@ -226,7 +222,7 @@ app.delete('/users/login', middleware.requireAuthentication, function (req, res)
 });
 
 // Sync the database
-db.sequelize.sync( /*{force: true}*/ ).then(function () {
+db.sequelize.sync( {force: true} ).then(function () {
     app.listen(PORT, function () {
         console.log('Express listening on port ' + PORT);
     });

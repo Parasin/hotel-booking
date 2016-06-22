@@ -73,7 +73,7 @@ app.factory('authFactory', ['$q', '$timeout', '$http', '$cookies', function ($q,
             })
             // handle error
             .error(function (data, status, headers) {
-                console.log('Data: ' + data + ' Status: ' + status + ' Headers: ' + JSON.stringify(headers));
+                //console.log('Data: ' + data + ' Status: ' + status + ' Headers: ' + JSON.stringify(headers));
                 user = false;
                 deferred.reject(data);
             });
