@@ -24,7 +24,7 @@ and open the template in the editor.
         <script src="/javascript/angular-route.min.js"></script>
         <script src="/javascript/app.js"></script>
         <script src="/javascript/routes.js"></script>
-        <script src="/javascript/services.js"></script>
+        <script src="/javascript/bookingApp.js"></script>
         <script src="/javascript/directives.js"></script>
         <script src="/javascript/authFactory.js"></script>
         <script src="/javascript/controllers.js"></script>
@@ -42,17 +42,17 @@ and open the template in the editor.
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a href="#" class="navbar-brand">HOTEL BOOKING</a>
+                    <a href="#/" class="navbar-brand">HOTEL BOOKING</a>
                 </div>
                 
                 <div class="collapse navbar-collapse" id="mainNavBar">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="#/">HOME</a></li>
-                        <li><a href="#/profile">PROFILE</a></li>
-                        <li><a href="#/booking">BOOKING</a></li>
-                        <li><a href="#/login">LOG IN</a></li>
-                        <li><a href="#/signup">SIGN UP</a></li>
-                        <li><a href="#aboutUs">ABOUT US</a></li>
+                        <li ng-class="{active: isActive('/')}"><a href="#/">HOME</a></li>
+                        <li ng-class="{active: isActive('/profile')}"><a href="#/profile">PROFILE</a></li>
+                        <li ng-class="{active: isActive('/booking')}"><a href="#/booking">BOOKING</a></li>
+                        <li ng-class="{active: isActive('/login')}"><a href="#/login">LOG IN</a></li>
+                        <li ng-class="{active: isActive('/signup')}"><a href="#/signup">SIGN UP</a></li>
+                        <li ng-class="{active: isActive('/aboutUs')}"><a href="#/aboutUs">ABOUT US</a></li>
                     </ul>
                 </div>
             </div>

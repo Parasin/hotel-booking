@@ -12,6 +12,9 @@ app.config(['$routeProvider', function($routeProvider) {
     .when('/booking', {
         templateUrl: 'BOOKING.html',
         controller: ''
+        , access: {
+            restricted: true
+        }
     })
     .when('/login', {
         templateUrl: 'LOG IN.html',

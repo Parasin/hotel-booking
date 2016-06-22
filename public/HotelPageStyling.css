@@ -7,6 +7,10 @@ and open the template in the editor.
     Created on : Jun 18, 2016, 2:54:36 PM
     Author     : Daniel Dang
 */
+.active {
+    background-color: azure;
+    color:aqua;
+}
 
 .navbar-default{
     background-color:#EB8D05;

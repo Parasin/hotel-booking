@@ -2,6 +2,14 @@ app.controller('homeController', ['$scope', '$resource', '$location', 'authentic
 
 }]);
 
+/* Main controller */
+app.controller('navController',
+    ['$scope', '$location', function($scope, $location) {
+         $scope.isActive = function (viewLocation) { 
+            return viewLocation === $location.path();
+        };
+}]);
+
 /* Login controller */
 app.controller('loginController', ['$scope', '$location', 'authFactory'
   , function ($scope, $location, authFactory) {
