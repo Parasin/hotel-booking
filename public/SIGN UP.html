@@ -4,51 +4,56 @@
                                                               special services that we have available at our hotel.</h4>
 </div>
 
-<div id="signup_layout">
-    <form name="registerForm" ng-controller="registerController" novalidate>
-        <div class="row">
+<div id="signup_layout" ng-controller="registerController">
+    <div class="col-md-6 col-md-offset-3">
+        <p class="alert alert-danger" ng-show="error">{{errorMessage}}</p>
+        <p class="alert alert-success" ng-show="success">Registration successful!</p>
+    </div>
+    
+    <form name="registerForm" ng-submit="registerForm.$valid && register()">
+        <div class="row form-group">
             <div class="col-md-1 col-md-offset-4">
-                <label for="usrName">Email:</label>
+                <label class="form-control-label" for="usrName">Email:</label>
             </div>
             <div class="col-md-2">
-                <input type="text" class="form-control" id="userName" ng-model="email" required>
+                <input type="email" class="form-control" id="userName" ng-model="email" placeholder="Enter Email" required>
             </div>
         </div>
-        <div class="row">
+        <div class="row form-group">
             <div class="col-md-1 col-md-offset-4">
-                <label for="pwd">Password:</label>
+                <label class="form-control-label" for="pwd">Password:</label>
             </div>
             <div class="col-md-2">
-                <input type="password" class="form-control" id="pwd" ng-model="password" required>
+                <input type="password" class="form-control" id="pwd" ng-model="password" ng-minlength="7" placeholder="Password must be at least 7 characters" required>
             </div>
         </div>
-        <div class="row">
+        <div class="row form-group">        
             <div class="col-md-1 col-md-offset-4">
-                <label for="pwdConfirm">Confirm Password:</label>
+                <label class="form-control-label" for="pwdConfirm">Confirm Password:</label>
             </div>
             <div class="col-md-2">
-                <input type="password" class="form-control" id="pwdConfirm" ng-model="confirmPassword" required>
+                <input type="password" class="form-control" id="pwdConfirm" ng-model="confirmPassword" ng-minlength="7" placeholder="Password must be at least 7 characters" required>
             </div>
         </div>
-        <div class="row">
+        <div class="row form-group">
             <div class="col-md-1 col-md-offset-4">
-                <label for="dob">Date of Birth:</label>
+                <label class="form-control-label" for="dob">Date of Birth:</label>
             </div>
             <div class="col-md-2">
                 <input type="date" class="form-control" id="dob" ng-model="dateOfBirth" required>
             </div>
         </div>
-        <div class="row">
+        <div class="row form-group">
             <div class="col-md-1 col-md-offset-4">
-                <label for="fstName">First name:</label>
+                <label class="form-control-label" for="fstName">First name:</label>
             </div>
             <div class="col-md-2">
                 <input type="text" class="form-control" id="fstName" ng-model="firstName" required>
             </div>
         </div>
-        <div class="row">
+        <div class="row form-group">
             <div class="col-md-1 col-md-offset-4">
-                <label for="lstName">Last name:</label>
+                <label class="form-control-label" for="lstName">Last name:</label>
             </div>
             <div class="col-md-2">
                 <input type="text" class="form-control" id="lstName" ng-model="lastName" required>
@@ -56,7 +61,7 @@
         </div>
         <div class="row" id="btn">
             <div class="col-md-2 col-md-offset-5">
-                <button class="btn btn-primary btn-block" id="signUpBtn" ng-click="register()">Sign Up</button>
+                <button class="btn btn-primary btn-block" type="submit" id="signUpBtn" ng-diabled="disabled">Sign Up</button>
             </div>
         </div>
     </form>

@@ -1,15 +1,20 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        
-    </head>
-    <body>
-       
-    </body>
-</html>
+<div class="col-xs-6 col-xs-offset-3">
+    <h2>Login</h2>
+    <hr/>
+    <div ng-show="error" class="alert alert-danger">{{errorMessage}}</div>
+    <form class="form" ng-submit="login()">
+        <div class="input-group">
+            <label class="input-group-addon">Username</label>
+            <input type="text" class="form-control" name="username" ng-model="loginForm.username" required>
+        </div>
+        <br/>
+        <div class="input-group">
+            <label class="input-group-addon">Password&nbsp;</label>
+            <input type="password" class="form-control" name="password" ng-model="loginForm.password" required>
+        </div>
+        <br/>
+        <div>
+            <button id="login" type="submit" class="btn btn-primary" ng-disabled="disabled">Login</button>
+        </div>
+    </form>
+</div>

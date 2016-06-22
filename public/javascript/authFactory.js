@@ -27,18 +27,18 @@ app.factory('authFactory', ['$q', '$timeout', '$http', function ($q, $timeout, $
         $http.post('/users/login', data)
             // handle success
             .success(function (data, status) {
-                if (status === 200 && data.status) {
+                if (status === 200) {
                     user = true;
-                    deferred.resolve();
+                    deferred.resolve(data);
                 } else {
                     user = false;
-                    deferred.reject();
+                    deferred.reject(data);
                 }
             })
             // handle error
             .error(function (data) {
                 user = false;
-                deferred.reject();
+                deferred.reject(data);
             });
 
         // return promise object
@@ -55,12 +55,12 @@ app.factory('authFactory', ['$q', '$timeout', '$http', function ($q, $timeout, $
             // handle success
             .success(function (data) {
                 user = false;
-                deferred.resolve();
+                deferred.resolve(data);
             })
             // handle error
             .error(function (data) {
                 user = false;
-                deferred.reject();
+                deferred.reject(data);
             });
 
         // return promise object
@@ -68,29 +68,23 @@ app.factory('authFactory', ['$q', '$timeout', '$http', function ($q, $timeout, $
 
     };
 
-    factory.register = function (email, password, dateOfBirth, firstName, lastName) {
+    factory.register = function (data) {
         // create a new instance of deferred
         var deferred = $q.defer();
 
         // send a post request to the server
-        $http.post('/users', {
-                email: email
-                , password: password
-                , dateOfBirth: dateOfBirth
-                , firstName: firstName
-                , lastName: lastName
-            })
+        $http.post('/users', data)
             // handle success
             .success(function (data, status) {
-                if (status === 200 && data.status) {
-                    deferred.resolve();
+                if (status === 200) {
+                    deferred.resolve(data);
                 } else {
-                    deferred.reject();
+                    deferred.reject(data);
                 }
             })
             // handle error
             .error(function (data) {
-                deferred.reject();
+                deferred.reject(data);
             });
 
         // return promise object
