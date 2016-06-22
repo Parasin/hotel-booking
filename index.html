@@ -4,9 +4,9 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<html>
+<html ng-app="bookingApp">
     <head>
-        <title>TODO supply a title</title>
+        <title>Hotel Booking - Home</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
@@ -14,10 +14,21 @@ and open the template in the editor.
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
         <!-- jQuery library -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
         <!-- Latest compiled JavaScript -->
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script src="/javascript/angular.min.js"></script>
+        <script src="/javascript/angular-animate.min.js"></script>
+        <script src="/javascript/angular-resource.min.js"></script>
+        <script src="/javascript/angular-route.min.js"></script>
+        <script src="/javascript/app.js"></script>
+        <script src="/javascript/routes.js"></script>
+        <script src="/javascript/services.js"></script>
+        <script src="/javascript/directives.js"></script>
+        <script src="/javascript/authFactory.js"></script>
+        <script src="/javascript/controllers.js"></script>
+        <script src="/javascript/underscore-min.js"></script>
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine">
         <link rel="stylesheet" type="text/css" href="HotelPageStyling.css">
     </head>
@@ -36,16 +47,21 @@ and open the template in the editor.
                 
                 <div class="collapse navbar-collapse" id="mainNavBar">
                     <ul class="nav navbar-nav">
-                        <li><a href="HOME.html">HOME</a></li>
-                        <li class="active"><a href="PROFILE.html">PROFILE</a></li>
-                        <li><a href="BOOKING.html">BOOKING</a></li>
-                        <li><a href="LOG IN.html">LOG IN</a></li>
-                        <li><a href="SIGN UP.html">SIGN UP</a></li>
-                        <li><a href="ABOUT US.html">ABOUT US</a></li>
+                        <li class="active"><a href="#/">HOME</a></li>
+                        <li><a href="#/profile">PROFILE</a></li>
+                        <li><a href="#/booking">BOOKING</a></li>
+                        <li><a href="#/login">LOG IN</a></li>
+                        <li><a href="#/signup">SIGN UP</a></li>
+                        <li><a href="#aboutUs">ABOUT US</a></li>
                     </ul>
                 </div>
             </div>
         </div>
             <!---------------------------------------------------------------------------------->
+      
+        <!--Home Page content -->
+        <div>
+            <div class="containter" ng-view></div>
+        </div>
     </body>
 </html>

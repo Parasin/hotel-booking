@@ -8,10 +8,10 @@ var middleware = require('./middleware.js')(db);
 var app = express();
 var PORT = process.env.PORT || 3000;
 
-app.use(express.static(path.join(__dirname, 'html_css_files')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function (req, res) {
-    res.send('Booking API root');
+    res.sendFile('index.html', {root: __dirname});
 });
 
 app.use(bodyParser.json());

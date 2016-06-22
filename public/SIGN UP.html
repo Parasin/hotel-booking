@@ -1,0 +1,63 @@
+<div id="form_headline">
+    <h2>Membership Sign Up Form</h2>
+    <h4>Fill out the information below to sign up for an account and be eligible on 
+                                                              special services that we have available at our hotel.</h4>
+</div>
+
+<div id="signup_layout">
+    <form name="registerForm" ng-controller="registerController" novalidate>
+        <div class="row">
+            <div class="col-md-1 col-md-offset-4">
+                <label for="usrName">Email:</label>
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" id="userName" ng-model="email" required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1 col-md-offset-4">
+                <label for="pwd">Password:</label>
+            </div>
+            <div class="col-md-2">
+                <input type="password" class="form-control" id="pwd" ng-model="password" required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1 col-md-offset-4">
+                <label for="pwdConfirm">Confirm Password:</label>
+            </div>
+            <div class="col-md-2">
+                <input type="password" class="form-control" id="pwdConfirm" ng-model="confirmPassword" required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1 col-md-offset-4">
+                <label for="dob">Date of Birth:</label>
+            </div>
+            <div class="col-md-2">
+                <input type="date" class="form-control" id="dob" ng-model="dateOfBirth" required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1 col-md-offset-4">
+                <label for="fstName">First name:</label>
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" id="fstName" ng-model="firstName" required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1 col-md-offset-4">
+                <label for="lstName">Last name:</label>
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" id="lstName" ng-model="lastName" required>
+            </div>
+        </div>
+        <div class="row" id="btn">
+            <div class="col-md-2 col-md-offset-5">
+                <button class="btn btn-primary btn-block" id="signUpBtn" ng-click="register()">Sign Up</button>
+            </div>
+        </div>
+    </form>
+</div>

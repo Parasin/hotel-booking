@@ -11,9 +11,9 @@ module.exports = function (params, method) {
         }, function (error, response, body) {
             if (error) {
                 reject(error);
-            } else if (response.statusCode != 200) {
+            /*} else if (response.statusCode != 200) {
                 var err = new Error('Received response code: ' + response.statusCode);
-                reject(err);
+                reject(err);*/
             } else {
                 resolve(body);
             }
