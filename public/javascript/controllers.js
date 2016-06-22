@@ -20,7 +20,7 @@ app.controller('loginController', ['$scope', '$location', 'authFactory'
             $scope.disabled = true;
 
             // call login from service
-            authFactory.login($scope.loginForm.username, $scope.loginForm.password)
+            authFactory.login($scope.loginForm.email, $scope.loginForm.password)
                 // handle success
                 .then(function () {
                     $location.path('#/');

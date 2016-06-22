@@ -2,10 +2,10 @@
     <h2>Login</h2>
     <hr/>
     <div ng-show="error" class="alert alert-danger">{{errorMessage}}</div>
-    <form class="form" ng-submit="login()">
+    <form class="form" ng-controller="loginController" ng-submit="login()">
         <div class="input-group">
-            <label class="input-group-addon">Username</label>
-            <input type="text" class="form-control" name="username" ng-model="loginForm.username" required>
+            <label class="input-group-addon">Email&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <input type="text" class="form-control" name="email" ng-model="loginForm.email" required>
         </div>
         <br/>
         <div class="input-group">

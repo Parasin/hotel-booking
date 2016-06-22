@@ -197,7 +197,7 @@ app.post('/users', function (req, res) {
 app.post('/users/login', function (req, res) {
     var body = _.pick(req.body, 'email', 'password');
     var userInstance;
-    
+    console.log(JSON.stringify(body));
     db.user.authenticate(body).then(function (user) {
         var token = user.generateToken('authentication');
         userInstance = user;
@@ -208,7 +208,7 @@ app.post('/users/login', function (req, res) {
     }).then(function (tokenInstance) {
         res.header('Auth', tokenInstance.get('token')).json(userInstance.toPublicJSON());
     }).catch(function (err) {
-        res.status(401).send();
+        res.status(401).send(err);
     });
 });
 

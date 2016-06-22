@@ -16,11 +16,11 @@ app.factory('authFactory', ['$q', '$timeout', '$http', function ($q, $timeout, $
         return user;
     };
 
-    factory.login = function (username, password) {
+    factory.login = function (email, password) {
         // create a new instance of deferred
         var deferred = $q.defer();
         var data = {
-            username: username
+            email: email
             , password: password
         };
         // send a post request to the server
