@@ -60,3 +60,35 @@ and open the template in the editor.
     font-family: Josefin Slab;
     font-style: italic;
 }
+
+@keyframes fadeIn {
+    0%    { opacity: 0; }
+    50%   { opacity: .5; }
+    100%  { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    0%    { opacity: 1; }
+    50%   { opacity: .5; }
+    100%  { opacity: 0; }
+}
+
+@keyframes slideOutLeft {
+    to      { transform: translateX(-100%); }
+}
+
+@keyframes slideInRight {
+    from    { transform: translateX(100%); }
+    to      { transform: translateX(0); }
+}
+
+.ng-enter  { 
+    animation: fadeIn 0.3s both ease; 
+    animation-delay: 0.23s;
+    z-index: 8888;
+}
+
+.ng-leave  { 
+    animation: fadeOut 0.2s both ease;
+    z-index: 9999;
+}
