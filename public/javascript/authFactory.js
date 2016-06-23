@@ -5,7 +5,7 @@ app.factory('authFactory', ['$q', '$timeout', '$http', '$cookies', function ($q,
     var factory = {};
 
     factory.isLoggedIn = function () {
-        if (user.status) {
+        if (user) {
             return true;
         } else {
             return false;
@@ -13,7 +13,7 @@ app.factory('authFactory', ['$q', '$timeout', '$http', '$cookies', function ($q,
     };
 
     factory.getUserStatus = function () {
-        return user.status;
+        return user;
     };
 
     factory.login = function (email, password) {
@@ -29,7 +29,12 @@ app.factory('authFactory', ['$q', '$timeout', '$http', '$cookies', function ($q,
             .success(function (data, status, headers) {
                 if (status === 200) {
                     user = true;
-                    //console.log('HEADERS: ' + headers);
+                    if ($cookies.get('Auth')) {
+                       $cookies.remove('Auth');
+                    }
+                    if ($cookies.get('email')) {
+                        $cookies.remove('email');
+                    }
                     $cookies.put('Auth', headers('Auth'));
                     $cookies.put('email', data.email);
                     deferred.resolve(data);

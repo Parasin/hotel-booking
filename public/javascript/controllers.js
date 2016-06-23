@@ -4,45 +4,39 @@ app.controller('homeController', ['$scope', '$resource', '$location', 'authentic
 
 /* Main controller */
 app.controller('navController',
-    ['$scope', '$location', function($scope, $location) {
+    ['$scope', '$location', 'authFactory', function($scope, $location, authFactory) {
+       // $scope.logoutEnabled = authFactory.isLoggedIn();
          $scope.isActive = function (viewLocation) { 
             return viewLocation === $location.path();
         };
 }]);
 
 /* Login controller */
-app.controller('loginController', ['$scope', '$location', 'authFactory', '$cookies'
-  , function ($scope, $location, authFactory, $cookies) {
+app.controller('loginController', ['$scope', '$location', 'authFactory', '$cookies', '$route' , function ($scope, $location, authFactory, $cookies, $route) {
         $scope.error;
         $scope.errorMessage;
-        if (authFactory.user) {
-            $location.path('#/');
-        }
-        $scope.login = function () {
-            //console.log('\n\nLogin with cookie: ' + $cookies.get('Auth') + '\n\n')
-            
+
+        $scope.login = function () {            
             // initial values
             $scope.error = false;
 
             // call login from service
-            $scope.$watch('errorMessage', function() {
-                authFactory.login($scope.loginForm.email, $scope.loginForm.password)
-                // handle success
-                .then(function () {
-                    $scope.error = false;
-                    $scope.errorMessage = '';
-                    $scope.loginForm = {};
-                    $location.path('#/');
-                }, function(err) {
-                    $scope.error = true;
-                    $scope.errorMessage = "Invalid username and/or password";
-                    console.log($scope.errorMessage);
-                }).catch(function () {
-                    $scope.error = true;
-                    $scope.errorMessage = "Account does not exist with that email.";
-                    $scope.loginForm = {};
-                });
-            }, true);
+            authFactory.login($scope.loginForm.email, $scope.loginForm.password)
+            // handle success
+            .then(function () {
+                $scope.error = false;
+                $scope.errorMessage = '';
+                $scope.loginForm = {};
+                $location.path('/booking');
+            }, function(err) {
+                $scope.error = true;
+                $scope.errorMessage = "Invalid username and/or password";
+                console.log($scope.errorMessage);
+            }).catch(function () {
+                $scope.error = true;
+                $scope.errorMessage = "Account does not exist with that email.";
+                $scope.loginForm = {};
+            });
         };
 }]);
 
@@ -101,11 +95,12 @@ app.controller('registerController', ['$scope', '$location', 'authFactory'
 }]);
 
 /* Logout controller */
-app.controller('logoutController', ['$scope', '$location', 'authFactory'
-  , function ($scope, $location, authFactory) {
-
+app.controller('logoutController', ['$scope', '$location', 'authFactory', '$cookies'
+  , function ($scope, $location, authFactory, $cookies) {
         $scope.logout = function () {
-
+            if (!authFactory.isLoggedIn()) {
+                return;
+            }
             // call logout from service
             authFactory.logout()
                 .then(function (data) {
