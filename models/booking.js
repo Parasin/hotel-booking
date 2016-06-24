@@ -19,7 +19,7 @@ module.exports = function (sequelize, DataTypes) {
             }
         }
         , "bookedAt": {
-            "type": DataTypes.NOW
+            "type": sequelize.fn('NOW')
             , "allowNull": false
             , "defaultValue": DataTypes.NOW
             , "validate": {
@@ -29,7 +29,6 @@ module.exports = function (sequelize, DataTypes) {
         , "startDate": {
             "type": DataTypes.DATE
             , "allowNull": false
-            , "defaultValue": DataTypes.NOW
             , "validate": {
                 "isDate": true
             }
@@ -37,7 +36,6 @@ module.exports = function (sequelize, DataTypes) {
         , "endDate": {
             "type": DataTypes.DATE
             , "allowNull": false
-            , "defaultValue": DataTypes.NOW
             , "validate": {
                 "isDate": true
             }
