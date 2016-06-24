@@ -18,14 +18,14 @@ module.exports = function (sequelize, DataTypes) {
                 "isNumeric": true
             }
         }
-        , "bookedAt": {
+        /*, "bookedAt": {
             "type": sequelize.fn('NOW')
             , "allowNull": false
             , "defaultValue": DataTypes.NOW
             , "validate": {
                 "isDate": true
             }
-        }
+        }*/
         , "startDate": {
             "type": DataTypes.DATE
             , "allowNull": false
