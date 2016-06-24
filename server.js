@@ -3,9 +3,9 @@ var bodyParser = require('body-parser');
 var _ = require('underscore');
 var db = require('./db.js');
 var bcrypt = require('bcryptjs');
-var path = require('path');
 var middleware = require('./middleware.js')(db);
 var app = express();
+var path = require('path');
 var PORT = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname, 'public')));
