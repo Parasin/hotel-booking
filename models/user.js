@@ -63,6 +63,11 @@ module.exports = function (sequelize, DataTypes) {
                 }
             }
         }
+        , getterMethods: {
+            fullName: function () {
+                return this.firstName + ' ' + this.lastName;
+            }
+        }
         , "instanceMethods": {
             toPublicJSON: function () {
                 var json = this.toJSON();

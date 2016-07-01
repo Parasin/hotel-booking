@@ -104,6 +104,57 @@ module.exports = function (sequelize, DataTypes) {
                     }
                 });
             }
+            , getAvailableRooms: function (query, rooms) {
+                return new Promise(function (resolve, reject) {
+                    try {
+                        var where = {};
+                        if (query.hasOwnProperty('roomNumber')) {
+                            where.roomNumber = query.roomNumber;
+                        }
+                        if (query.hasOwnProperty('endDate')) {
+                            where.endDate = Date.parse(query.endDate);
+                        }
+                        if (query.hasOwnProperty('startDate')) {
+                            where.startDate = Date.parse(query.startDate);
+                        }
+                        if (query.hasOwnProperty('availability')) {
+                            where.availability = query.availability;
+                        } else {
+                            where.availability = 'Unavailable';
+                        }
+
+                        booking.findAll({
+                            "where": where
+                        }).then(function (bookings) {
+                            var desiredStartDate = Date.parse(query.startDate.toString());
+                            var desiredEndDate = Date.parse(query.endDate.toString());
+
+                            for (var i = 0; i < bookings.length; i++) {
+                                var bookingStart = Date.parse(bookings[i].startDate);
+                                var bookingEnd = Date.parse(bookings[i].endDate);
+
+                                // If the range we are booking overlaps with a booking remove from rooms
+                                if ((desiredStartDate >= bookingStart && desiredStartDate <= bookingEnd) || (desiredEndDate >= bookingStart && desiredEndDate <= bookingEnd)) {
+                                    rooms = _.reject(rooms, function (room) {
+                                        return room.roomNumber === bookings[i].roomNumber;
+                                    });
+                                }
+                            }
+                            for (var i = 0; i < rooms.length; i++) {
+                                rooms[i] = _.pick(rooms[i], 'roomNumber', 'roomType', 'pricePerNight');
+                            }
+                            
+                            if (!_.isEmpty(rooms)) {
+                                resolve(rooms);
+                            } else {
+                                reject({error: 'No rooms available'});
+                            }
+                        });
+                    } catch (err) {
+                        reject(err);
+                    }
+                });
+            }
         }
     });
     return booking;

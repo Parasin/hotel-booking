@@ -39,15 +39,7 @@ app.get('/bookings/user/:id', middleware.requireAuthentication, function (req, r
     });
 });
 
-/* GET all available bookings 
-TODO: Need to update to show all rooms that are not booked. 
-Steps: 
-    1) Get list of rooms from db.rooms that match user search criteria
-    2) Use db.booking.checkAvailability to see if rooms are booked in the range
-    3) For all rooms that are not booked in our range, push them to
-       json object that is to be the response
-    4) Once all rooms checked, res.json(rooms)
-*/
+/* GET all available bookings */
 app.get('/bookings', middleware.requireAuthentication, function (req, res) {
     var query = _.pick(req.query, 'endDate', 'startDate', 'availability', 'roomNumber', 'pricePerNight', 'roomType');
     var where = {};
@@ -57,7 +49,7 @@ app.get('/bookings', middleware.requireAuthentication, function (req, res) {
         where.roomNumber = query.roomNumber;
     }
     if (query.hasOwnProperty('pricePerNight')) {
-        where.pricePerNight = query.pricePerNight;
+        where.pricePerNight =  {$lte: query.pricePerNight};
     }
     if (query.hasOwnProperty('roomType')) {
         where.roomType = query.roomType;
@@ -67,59 +59,18 @@ app.get('/bookings', middleware.requireAuthentication, function (req, res) {
     db.room.findAll({
         where: where
     }).then(function (returnedRooms) {
-        rooms = returnedRooms;
+        rooms = returnedRooms;        
+        db.booking.getAvailableRooms(query, rooms).then(function (availableRooms) {
+            if(!_.has('error')) {
+                res.send(availableRooms);
+            } else {
+                res.status(404).send(availableRooms);
+            }
+        }, function (err) {
+            res.status(404).send(err);
+        });
     }, function (err) {
         console.log(JSON.stringify(err));
-    });
-    
-    where = {};
-    if (query.hasOwnProperty('roomNumber')) {
-        where.roomNumber = query.roomNumber;
-    }
-    if (query.hasOwnProperty('endDate')) {
-        where.endDate = Date.parse(query.endDate);
-    }
-    if (query.hasOwnProperty('startDate')) {
-        where.startDate = Date.parse(query.startDate);
-    }
-    if (query.hasOwnProperty('availability')) {
-        where.availability = query.availability;
-    } else {
-        where.availability = 'Unavailable';
-    }
-    
-    db.booking.findAll({
-        "where": where
-    }).then(function (bookings) {
-        var desiredStartDate = Date.parse(query.startDate.toString());
-        var desiredEndDate = Date.parse(query.endDate.toString());
-       
-        for (var i = 0; i < bookings.length; i++) {
-            var bookingStart = Date.parse(bookings[i].startDate);
-            var bookingEnd = Date.parse(bookings[i].endDate);
-            
-            // If the range we are booking overlaps with a booking remove from rooms
-            if ((desiredStartDate >= bookingStart && desiredStartDate <= bookingEnd) || (desiredEndDate >= bookingStart && desiredEndDate <= bookingEnd)) {
-                 rooms = _.reject(rooms, function(room) {
-                     if (room.roomNumber === bookings[i].roomNumber) {
-                         console.log('overlap found on room: ' + room.roomNumber);
-                     }
-                    return room.roomNumber === bookings[i].roomNumber;
-                 });
-            }
-        }
-        for (var i = 0; i < rooms.length; i++) {
-            rooms[i] = _.pick(rooms[i], 'roomNumber', 'roomType', 'pricePerNight');
-        }
-        
-        if (!_.isEmpty(rooms)) {
-            res.json(rooms);
-        } else {
-            res.status(404).send({error: 'No rooms available'});
-        }
-        
-    }).catch(function (err) {
-        res.status(500).send(err);
     });
 });
 
