@@ -2,7 +2,7 @@ var Sequelize = require('sequelize');
 var _ = require('underscore');
 
 module.exports = function (sequelize, DataTypes) {
-    var booking =  sequelize.define('booking', {
+    var booking = sequelize.define('booking', {
         "bookedBy": {
             "type": DataTypes.STRING
             , "allowNull": false
@@ -58,8 +58,7 @@ module.exports = function (sequelize, DataTypes) {
             }
         }
     }, {
-        "hooks": {
-        }
+        "hooks": {}
         , "classMethods": {
             checkAvailability: function (body) {
                 return new Promise(function (resolve, reject) {
@@ -76,17 +75,19 @@ module.exports = function (sequelize, DataTypes) {
                                 var utcEndDate = Date.parse(body.endDate);
 
                                 if (utcEndDate < utcStartDate || utcStartDate > utcEndDate) {
-                                    reject({error: 'Room unavailable for requested time'});  
+                                    reject({
+                                        error: 'Time range is not valid'
+                                    });
                                 }
 
                                 for (var i = 0; i < bookings.length; i++) {
                                     var bookingStart = Date.parse(bookings[i].startDate);
                                     var bookingEnd = Date.parse(bookings[i].endDate);
 
-                                    if (utcStartDate >= bookingStart && utcStartDate <= bookingEnd) {
-                                        reject({error: 'Room unavailable for requested time'});  
-                                    } else if (utcEndDate >= bookingEnd && utcEndDate <= bookingEnd) {
-                                        reject({error: 'Room unavailable for requested time'});   
+                                    if ((utcStartDate >= bookingStart && utcStartDate <= bookingEnd) || (utcEndDate >= bookingStart && utcEndDate <= bookingEnd)) {
+                                        reject({
+                                            error: 'Room unavailable for requested time'
+                                        });
                                     } else {
                                         resolve();
                                     }

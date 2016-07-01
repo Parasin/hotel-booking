@@ -18,7 +18,7 @@ if (env === 'production') {
 var db = {};
 
 // Create the relations for use
-db.userType = sequelize.import(__dirname + '/models/userType.js');
+//db.userType = sequelize.import(__dirname + '/models/userType.js');
 db.user = sequelize.import(__dirname + '/models/user.js');
 db.roomType = sequelize.import(__dirname + '/models/roomType.js');
 db.room = sequelize.import(__dirname + '/models/room.js');
@@ -29,8 +29,8 @@ db.Sequelize = Sequelize;
 
 // Set relationships between tables
 db.roomType.belongsTo(db.room);
-db.room.belongsTo(db.booking);
-db.userType.belongsTo(db.user);
+db.booking.hasMany(db.room);
+//db.userType.belongsTo(db.user);
 db.booking.belongsTo(db.user);
 db.user.hasMany(db.booking);
 

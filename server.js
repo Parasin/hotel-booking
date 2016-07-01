@@ -40,31 +40,84 @@ app.get('/bookings/user/:id', middleware.requireAuthentication, function (req, r
 });
 
 /* GET all available bookings 
-TODO: Need to update to show all rooms that are not booked. */
+TODO: Need to update to show all rooms that are not booked. 
+Steps: 
+    1) Get list of rooms from db.rooms that match user search criteria
+    2) Use db.booking.checkAvailability to see if rooms are booked in the range
+    3) For all rooms that are not booked in our range, push them to
+       json object that is to be the response
+    4) Once all rooms checked, res.json(rooms)
+*/
 app.get('/bookings', middleware.requireAuthentication, function (req, res) {
-    var query = _.pick(req.query, 'endDate', 'startDate', 'availability', 'roomNumber');
+    var query = _.pick(req.query, 'endDate', 'startDate', 'availability', 'roomNumber', 'pricePerNight', 'roomType');
     var where = {};
-
+    var rooms = {};
+    
+    if (query.hasOwnProperty('roomNumber')) {
+        where.roomNumber = query.roomNumber;
+    }
+    if (query.hasOwnProperty('pricePerNight')) {
+        where.pricePerNight = query.pricePerNight;
+    }
+    if (query.hasOwnProperty('roomType')) {
+        where.roomType = query.roomType;
+    }
+    where.inService = 1;
+    
+    db.room.findAll({
+        where: where
+    }).then(function (returnedRooms) {
+        rooms = returnedRooms;
+    }, function (err) {
+        console.log(JSON.stringify(err));
+    });
+    
+    where = {};
     if (query.hasOwnProperty('roomNumber')) {
         where.roomNumber = query.roomNumber;
     }
     if (query.hasOwnProperty('endDate')) {
-        where.endDate = query.endDate;
+        where.endDate = Date.parse(query.endDate);
     }
     if (query.hasOwnProperty('startDate')) {
-        where.startDate = query.StartDate;
+        where.startDate = Date.parse(query.startDate);
     }
     if (query.hasOwnProperty('availability')) {
         where.availability = query.availability;
     } else {
-        where.availability = 'Available';
+        where.availability = 'Unavailable';
     }
-
-
+    
     db.booking.findAll({
         "where": where
     }).then(function (bookings) {
-        res.json(bookings);
+        var desiredStartDate = Date.parse(query.startDate.toString());
+        var desiredEndDate = Date.parse(query.endDate.toString());
+       
+        for (var i = 0; i < bookings.length; i++) {
+            var bookingStart = Date.parse(bookings[i].startDate);
+            var bookingEnd = Date.parse(bookings[i].endDate);
+            
+            // If the range we are booking overlaps with a booking remove from rooms
+            if ((desiredStartDate >= bookingStart && desiredStartDate <= bookingEnd) || (desiredEndDate >= bookingStart && desiredEndDate <= bookingEnd)) {
+                 rooms = _.reject(rooms, function(room) {
+                     if (room.roomNumber === bookings[i].roomNumber) {
+                         console.log('overlap found on room: ' + room.roomNumber);
+                     }
+                    return room.roomNumber === bookings[i].roomNumber;
+                 });
+            }
+        }
+        for (var i = 0; i < rooms.length; i++) {
+            rooms[i] = _.pick(rooms[i], 'roomNumber', 'roomType', 'pricePerNight');
+        }
+        
+        if (!_.isEmpty(rooms)) {
+            res.json(rooms);
+        } else {
+            res.status(404).send({error: 'No rooms available'});
+        }
+        
     }).catch(function (err) {
         res.status(500).send(err);
     });
@@ -104,17 +157,30 @@ app.post('/bookings', middleware.requireAuthentication, function (req, res) {
     body.userId = req.user.get('id');
     body.availability = 'Unavailable';
 
-    /* See if the room is booked in our time range */
-    db.booking.checkAvailability(body).then(function (bookings) {
-        db.booking.create(body).then(function (booking) {
-            booking = _.pick(booking, 'bookedAt', 'startDate', 'endDate', 'bookedBy', 'availability', 'roomNumber');
-            res.json(booking);
-        }, function (err) {
-            return res.status(400).json(err);
-        });        
+    db.room.findOne({
+        where: {
+            id: body.roomNumber
+            , inService: 1
+        }
+    }).then(function (room) {
+        if (!_.isEmpty(room)) {
+            /* See if the room is booked in our time range */
+            db.booking.checkAvailability(body).then(function () {
+                db.booking.create(body).then(function (booking) {
+                    booking = _.pick(booking, 'bookedAt', 'startDate', 'endDate', 'bookedBy', 'availability', 'roomNumber');
+                    res.json(booking);
+                }, function (err) {
+                    return res.status(400).json(err);
+                });        
+            }, function (err) {
+                res.status(400).json(err);
+            });
+        }
     }, function (err) {
-        res.status(404).json(err);
-    })
+        res.status(404).send({error: 'Room not available'});
+    });
+    
+    
 });
 
 
@@ -211,13 +277,23 @@ app.post('/users/login', function (req, res) {
     });
 });
 
-
 /* DELETE /users/login */
 app.delete('/users/login', middleware.requireAuthentication, function (req, res) {
     req.token.destroy().then(function () {
         res.status(204).send();
     }).catch(function (err) {
         res.status(500).send(err);
+    });
+});
+
+/* POST create rooms */
+app.post('/rooms', middleware.requireAuthentication, function (req, res) {
+    var body = _.pick(req.body, 'roomNumber', 'roomType', 'pricePerNight', 'inService');
+    
+    db.room.create(body).then(function () {
+        res.send();
+    }, function (err) {
+        res.status(400).send(err);
     });
 });
 
