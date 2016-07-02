@@ -12,7 +12,7 @@ app.config(['$routeProvider', function($routeProvider) {
         templateUrl: 'PROFILE.html',
         controller: ''
         , access: {
-            restricted: false
+            restricted: true
         }
     })
     .when('/booking', {
