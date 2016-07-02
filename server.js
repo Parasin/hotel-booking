@@ -40,34 +40,38 @@ app.get('/bookings/user/:id', middleware.requireAuthentication, function (req, r
     });
 });
 
-/* GET all available bookings 
-TODO: Need to update to show all rooms that are not booked. */
+/* GET all available bookings */
 app.get('/bookings', middleware.requireAuthentication, function (req, res) {
-    var query = _.pick(req.query, 'endDate', 'startDate', 'availability', 'roomNumber');
+    var query = _.pick(req.query, 'endDate', 'startDate', 'availability', 'roomNumber', 'pricePerNight', 'roomType');
     var where = {};
-
+    var rooms = {};
+    
     if (query.hasOwnProperty('roomNumber')) {
         where.roomNumber = query.roomNumber;
     }
-    if (query.hasOwnProperty('endDate')) {
-        where.endDate = query.endDate;
+    if (query.hasOwnProperty('pricePerNight')) {
+        where.pricePerNight =  {$lte: query.pricePerNight};
     }
-    if (query.hasOwnProperty('startDate')) {
-        where.startDate = query.StartDate;
+    if (query.hasOwnProperty('roomType')) {
+        where.roomType = query.roomType;
     }
-    if (query.hasOwnProperty('availability')) {
-        where.availability = query.availability;
-    } else {
-        where.availability = 'Available';
-    }
-
-
-    db.booking.findAll({
-        "where": where
-    }).then(function (bookings) {
-        res.json(bookings);
-    }).catch(function (err) {
-        res.status(500).send(err);
+    where.inService = 1;
+    
+    db.room.findAll({
+        where: where
+    }).then(function (returnedRooms) {
+        rooms = returnedRooms;        
+        db.booking.getAvailableRooms(query, rooms).then(function (availableRooms) {
+            if(!_.has('error')) {
+                res.send(availableRooms);
+            } else {
+                res.status(404).send(availableRooms);
+            }
+        }, function (err) {
+            res.status(404).send(err);
+        });
+    }, function (err) {
+        console.log(JSON.stringify(err));
     });
 });
 
@@ -105,17 +109,30 @@ app.post('/bookings', middleware.requireAuthentication, function (req, res) {
     body.userId = req.user.get('id');
     body.availability = 'Unavailable';
 
-    /* See if the room is booked in our time range */
-    db.booking.checkAvailability(body).then(function (bookings) {
-        db.booking.create(body).then(function (booking) {
-            booking = _.pick(booking, 'bookedAt', 'startDate', 'endDate', 'bookedBy', 'availability', 'roomNumber');
-            res.json(booking);
-        }, function (err) {
-            return res.status(400).json(err);
-        });        
+    db.room.findOne({
+        where: {
+            id: body.roomNumber
+            , inService: 1
+        }
+    }).then(function (room) {
+        if (!_.isEmpty(room)) {
+            /* See if the room is booked in our time range */
+            db.booking.checkAvailability(body).then(function () {
+                db.booking.create(body).then(function (booking) {
+                    booking = _.pick(booking, 'bookedAt', 'startDate', 'endDate', 'bookedBy', 'availability', 'roomNumber');
+                    res.json(booking);
+                }, function (err) {
+                    return res.status(400).json(err);
+                });        
+            }, function (err) {
+                res.status(400).json(err);
+            });
+        }
     }, function (err) {
-        res.status(404).json(err);
-    })
+        res.status(404).send({error: 'Room not available'});
+    });
+    
+    
 });
 
 
@@ -212,13 +229,23 @@ app.post('/users/login', function (req, res) {
     });
 });
 
-
 /* DELETE /users/login */
 app.delete('/users/login', middleware.requireAuthentication, function (req, res) {
     req.token.destroy().then(function () {
         res.status(204).send();
     }).catch(function (err) {
         res.status(500).send(err);
+    });
+});
+
+/* POST create rooms */
+app.post('/rooms', middleware.requireAuthentication, function (req, res) {
+    var body = _.pick(req.body, 'roomNumber', 'roomType', 'pricePerNight', 'inService');
+    
+    db.room.create(body).then(function () {
+        res.send();
+    }, function (err) {
+        res.status(400).send(err);
     });
 });
 

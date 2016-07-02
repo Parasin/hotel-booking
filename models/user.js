@@ -63,10 +63,15 @@ module.exports = function (sequelize, DataTypes) {
                 }
             }
         }
+        , getterMethods: {
+            fullName: function () {
+                return this.firstName + ' ' + this.lastName;
+            }
+        }
         , "instanceMethods": {
             toPublicJSON: function () {
                 var json = this.toJSON();
-                return _.pick(json, 'id', 'email', 'createdAt', 'updatedAt', 'firstName', 'lastName');
+                return _.pick(json, 'id', 'email', 'dateOfBirth', 'firstName', 'lastName');
             }
             , "generateToken": function (type) {
                 if (_.isString(type)) {

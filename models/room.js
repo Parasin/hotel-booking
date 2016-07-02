@@ -2,20 +2,13 @@ var _ = require('underscore');
 
 module.exports = function (sequelize, DataTypes) {
     return sequelize.define('room', {
-        "roomNumber": {
-            "type": DataTypes.INTEGER
-            , "allowNull": false
-            , "unique": true
-            , "validate": {
-                "isNumeric": true
-            }
-        }
-        , "roomType": {
+        "roomType": {
             "type": DataTypes.STRING
             , "allowNull": false
             , "unique": false
             , "validate": {
-                "isAlpha": true
+                is: ["^[a-z ]+$",'i']
+                , "notEmpty": true
             }
         }
         , "pricePerNight": {
@@ -27,7 +20,7 @@ module.exports = function (sequelize, DataTypes) {
             }
         }
         , "inService": {
-            "type": DataTypes.BOOLEAN
+            "type": DataTypes.INTEGER
             , "allowNull": false
             , "validate": {
                 "isNumeric": true
