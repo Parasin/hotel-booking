@@ -56,6 +56,19 @@ and open the template in the editor.
     text-align: center;
 }
 
+#about_us{
+    width: 75%;
+    height: 100%;
+    border-radius: 10px 10px 10px 10px;
+    margin: 0 auto;
+    text-align: center;
+    border-style: solid solid solid solid;
+    border-color: #EB8D05;
+    padding: 20px 20px 20px 20px;
+    font-family: Josefin Slab;
+    font-style: italic;
+}
+
 #services_offer{
     font-family: Josefin Slab;
     font-style: italic;
@@ -92,3 +105,4 @@ and open the template in the editor.
     animation: fadeOut 0.2s both ease;
     z-index: 9999;
 }
+

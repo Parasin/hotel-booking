@@ -1,2 +1,9 @@
 node_modules/
 data/*.sqlite
+/html_css_files/Hotel_Website/nbproject/private/
+/html_css_files/testing/nbproject/private/
+/html_css_files/TableGenProject/nbproject/private/
+/html_css_files/TableGenProject/build/
+/html_css_files/TableGenProject/dist/
+/nbproject/private/
+/public/nbproject/private/
