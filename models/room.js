@@ -26,5 +26,55 @@ module.exports = function (sequelize, DataTypes) {
                 "isNumeric": true
             }
         }
+        , "view": {
+            "type": DataTypes.STRING
+            , "allowNull": false
+            , "validate": {
+                "isAlpha": true
+            }
+        }
+        , "numBed": {
+            "type": DataTypes.INTEGER
+            , "allowNull": false
+            , "validate": {
+                "isNumeric": true
+            }
+        }
+        , "numBath": {
+            "type": DataTypes.INTEGER
+            , "allowNull": false
+            , "validate": {
+                "isNumeric": true
+            }
+        }
+        , "kitchen": {
+            "type": DataTypes.INTEGER
+            , "allowNull": false
+            , "validate": {
+                "isNumeric": true
+            }
+        }
+    }, {
+        getterMethods: {
+            getRoom: function () {
+                return {
+                    roomType: this.roomType
+                    , pricePerNight: this.pricePerNight
+                    , inService: this.inService
+                    , view: this.view
+                    , numBed: this.numBed
+                    , numBath: this.numBath
+                    , kitchen: this.kitchen
+                };
+            }
+            , getRoomSize: function () {
+                return {
+                    view: this.view
+                    , numBed: this.numBed
+                    , numBath: this.numBath
+                    , kitchen: this.kitchen
+                };
+            }
+        }
     })
 };
