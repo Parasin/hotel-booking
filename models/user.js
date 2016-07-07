@@ -55,6 +55,22 @@ module.exports = function (sequelize, DataTypes) {
                 "isDate": true
             }
         }
+        , "vipStatus": {
+            "type": DataTypes.INTEGER
+            , "allowNull": false
+            , "defaultValue": 0
+            , "validate": {
+                "isNumeric": true
+            }
+        }
+        , "frequentUser": {
+            "type": DataTypes.INTEGER
+            , "allowNull": false
+            , "defaultValue": 0
+            , "validate": {
+                "isNumeric": true
+            }
+        }
     }, {
         "hooks": {
             "beforeValidate": function (user, options) {
