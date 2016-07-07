@@ -240,11 +240,22 @@ app.delete('/users/login', middleware.requireAuthentication, function (req, res)
 
 /* POST create rooms */
 app.post('/rooms', middleware.requireAuthentication, function (req, res) {
-    var body = _.pick(req.body, 'roomNumber', 'roomType', 'pricePerNight', 'inService');
+    var body = _.pick(req.body, /*'roomNumber',*/ 'roomType', 'pricePerNight', 'inService', 'hotelId', 'view', 'numBath', 'numBed', 'kitchen');
     
-    db.room.create(body).then(function () {
-        res.send();
-    }, function (err) {
+    db.room.create(body).then(function (room) {
+        res.send(body);
+    }).catch (function (err) {
+        res.status(400).send(err);
+    });
+});
+
+/* POST create hotel */
+app.post('/hotel', middleware.requireAuthentication, function (req, res) {
+    var body = _.pick(req.body, 'phoneNo', 'name', 'street', 'city', 'zipcode', 'country');
+    
+    db.hotel.create(body).then(function () {
+        res.send(body);
+    }).catch(function (err) {
         res.status(400).send(err);
     });
 });
