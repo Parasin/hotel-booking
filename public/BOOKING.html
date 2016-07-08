@@ -1,16 +1,51 @@
 <div id="searchBar">
-    <div class="container-fluid">
-        <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">#Bed
-            <span class="caret"></span></button>
-            <ul class="dropdown-menu">
-                <li>item 1</li>
-                <li>item 2</li>
-                <li>item 3</li>
-                <li>item 4</li>
-            </ul>
+    <form method="post" action="xxxxxx.xxx">
+        <div id="selectBed">
+            <div class="labelAlign"><label>BED</label></div>
+            <select class="form-control" id="bedNum">Number of Bed
+                <option value="">SELECT BEDS</option>
+                <option value="one">One</option>
+                <option value="two">Two</option>
+                <option value="three">Three</option>
+            </select>
         </div>
-    
-    
-    </div>
+
+        <div id="selectKitchen">
+            <div class="labelAlign"><label>KITCHEN</label></div>
+            <select class="form-control" id="bedNum">Number of Bed
+                <option value="">SELECT KITCHEN</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+
+        <div id="selectRoomType">
+            <div class="labelAlign"><label>ROOM TYPE</label></div>
+            <select class="form-control" id="bedNum">Number of Bed
+                <option value="">SELECT ROOM TYPE</option>
+                <option value="type1">Type1</option>
+                <option value="type2">Type2</option>
+            </select>
+        </div>
+
+        <div id="selectView">
+            <div class="labelAlign"><label>VIEW</label></div>
+            <select class="form-control" id="bedNum">Number of Bed
+                <option value="">SELECT VIEW</option>
+                <option value="beachfront">Beach Front</option>
+                <option value="normal">Normal</option>
+            </select>
+        </div>
+
+        <div id="pricePerNight">
+            <div class="labelAlign"><label>PRICE ($)</label></div>
+                <div class="range-slider radius" data-slider id="slider">
+                    <span class="range-slider-handle" role="slider" tabindex="0"></span>
+                    <span class="range-slider-active-segment"></span>
+                    <input type="range" id="points" value="150" min="50" max="1000">
+                </div>
+        </div>
+        
+        <div id="submitBtn"  class="labelAlign"><input type="submit" value="Submit"/></div>
+    </form>
 </div>

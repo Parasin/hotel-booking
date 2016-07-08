@@ -74,6 +74,41 @@ and open the template in the editor.
     font-style: italic;
 }
 
+#searchBar{
+    border: solid solid solid solid;
+    border-radius: 5px 5px 5px 5px;
+    border-style: solid;
+    border-color: #EB8D05;
+    background-color: #EB8D05;
+    font-family: Josefin Slab;
+    margin: 0 auto;
+    align-self: auto;
+    width: 90%;
+    height: auto;
+
+}
+
+.labelAlign{align-self: center; align-content: center; text-align: center;}
+#selectBed{width: 13%;vertical-align: middle; margin-right: 20px; display: inline-block;}
+#selectKitchen{width: 15%;vertical-align: middle; margin-right:20px; display: inline-block;}
+#selectRoomType{width:16%; vertical-align: middle; margin-right:20px; display: inline-block;}
+#selectView{width:13%; vertical-align: middle; margin-right: 20px; display: inline-block;}
+#pricePerNight{width:20%; vertical-align: middle; margin-right: 20px; display: inline-block;}
+#submitBtn{width: 10%; height: 30px; vertical-align: middle; display: inline-block; background-color: #EB8D05;}
+#points{height: 10px;}
+
+#submitBtn > input{
+    width:100%; 
+    height: 100%; 
+    border-radius: 10px; 
+    border-color:#ff0000; 
+    border-style: solid; 
+    font-family=Josefin Slab; 
+    background-color: #ffa31a; 
+    font-size: 18px; 
+    text-align: center;
+}
+
 @keyframes fadeIn {
     0%    { opacity: 0; }
     50%   { opacity: .5; }
