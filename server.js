@@ -202,12 +202,12 @@ app.put('/bookings/:id', middleware.requireAuthentication, function (req, res) {
 
 /* POST users */
 app.post('/users', function (req, res) {
-    var body = _.pick(req.body, 'email', 'password', 'firstName', 'lastName', 'dateOfBirth');
+    var body = _.pick(req.body, 'email', 'password', 'firstName', 'lastName', 'dateOfBirth', 'vipStatus', 'frequentUser');
 
     db.user.create(body).then(function (user) {
         res.json(user.toPublicJSON());
     }).catch(function (err) {
-        res.status(400).json(err);
+        res.status(400).send(err);
     });
 });
 
@@ -229,6 +229,17 @@ app.post('/users/login', function (req, res) {
     });
 });
 
+/* PUT users */
+/*app.put('/users', function (req, res) {
+    var body = _.pick(req.body, 'email', 'password', 'firstName', 'lastName', 'dateOfBirth', 'vipStatus', 'frequentUser');
+
+    db.user.update(body).then(function (user) {
+        res.json(user.toPublicJSON());
+    }).catch(function (err) {
+        res.status(400).send(err);
+    });
+});*/
+
 /* DELETE /users/login */
 app.delete('/users/login', middleware.requireAuthentication, function (req, res) {
     req.token.destroy().then(function () {
@@ -240,7 +251,7 @@ app.delete('/users/login', middleware.requireAuthentication, function (req, res)
 
 /* POST create rooms */
 app.post('/rooms', middleware.requireAuthentication, function (req, res) {
-    var body = _.pick(req.body, /*'roomNumber',*/ 'roomType', 'pricePerNight', 'inService', 'hotelId', 'view', 'numBath', 'numBed', 'kitchen');
+    var body = _.pick(req.body, 'roomType', 'pricePerNight', 'inService', 'hotelId', 'view', 'numBath', 'numBed', 'kitchen');
     
     db.room.create(body).then(function (room) {
         res.send(body);
