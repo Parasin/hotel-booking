@@ -108,12 +108,13 @@ app.post('/bookings', middleware.requireAuthentication, function (req, res) {
     body.bookedBy = req.user.email;
     body.userId = req.user.get('id');
     body.availability = 'Unavailable';
-
+    
+    var where = {};
+    where.id = body.roomNumber;
+    where.inService = 1;
+    
     db.room.findOne({
-        where: {
-            id: body.roomNumber
-            , inService: 1
-        }
+        where: where
     }).then(function (room) {
         if (!_.isEmpty(room)) {
             /* See if the room is booked in our time range */
@@ -272,7 +273,7 @@ app.post('/hotel', middleware.requireAuthentication, function (req, res) {
 });
 
 // Sync the database
-db.sequelize.sync( /*{force: true}*/ ).then(function () {
+db.sequelize.sync( {force: true} ).then(function () {
     app.listen(PORT, function () {
         console.log('Express listening on port ' + PORT);
     });
