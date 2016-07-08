@@ -1,15 +1,62 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
+<!-- My Profile header -->
+
+<div id="profile_header" class="col-xs-6 col-xs-offset-3">
+    <h2>My Profile</h2>
+    <hr/>
+</div>
+    
+<!-- My Profile values -->
+
+<div id="profile_header" class="col-xs-6 col-xs-offset-3">
+    
+    <!-- TODO:
+        1. Display actual values?
+        2. Action buttons to change values?
+    -->
+    
+    <form class="form-horizontal" role="form">
         
-    </head>
-    <body>
-       
-    </body>
-</html>
+         <div class="form-group">
+             <label for="username">Username</label>
+             <input type="email" class="form-control" id="username" value="username123">
+         </div>
+        
+         <div class="form-group">
+             <label for="firstName">First Name</label>
+             <input type="text" class="form-control" id="firstName" ng-model="firstName">
+         </div>  
+        
+         <div class="form-group">
+             <label for="lastName">Last Name</label>
+             <input type="text" class="form-control" id="lastName" ng-model="lastName">
+         </div>
+        
+         <div class="form-group">
+             <label for="dob">Date of Birth</label>
+             <input type="date" class="form-control" id="dob" ng-model="dateOfBirth">
+         </div>
+        
+         <div class="form-group">
+             <label for="frequent_user">Frequent User</label>
+             <input type="text" class="form-control" id="frequent_user" ng-model="frequentUser" readonly>
+         </div>
+        
+         <div class="form-group">
+             <label for="vipStatus">VIP Status</label>
+             <input type="text" class="form-control" id="vipStatus" ng-model="vipStatus" readonly>
+         </div>
+        
+         <div class="form-group">
+             <label for="email">Email</label>
+             <input type="text" class="form-control" id="email" ng-model="email">
+         </div>
+        
+         <div class="form-group">
+             <label for="pwd">Change Password</label>
+             <input type="password" class="form-control" id="pwd" data-toggle="password">
+         </div>
+        
+    </form>
+    
+</div>
+
