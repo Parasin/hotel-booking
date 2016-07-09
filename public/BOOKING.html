@@ -38,12 +38,22 @@
         </div>
 
         <div id="pricePerNight">
-            <div class="labelAlign"><label>PRICE ($)</label></div>
+            <div class="labelAlign">
+                <label id="priceLbl">PRICE ($<label id="sliderVal"></label>)</label>
+            </div>
                 <div class="range-slider radius" data-slider id="slider">
                     <span class="range-slider-handle" role="slider" tabindex="0"></span>
                     <span class="range-slider-active-segment"></span>
-                    <input type="range" id="points" value="150" min="50" max="1000">
+                    <input type="range" id="sliderBar" value="150" min="50" max="1000" onChange="sliderChange(this.value)">
                 </div>
+            
+            <div>
+                <script type="text/javascript">
+                    function sliderChange(val){
+                        document.getElementById('sliderVal').innerHTML = val;
+                    }
+                </script> 
+            </div>
         </div>
         
         <div id="submitBtn"  class="labelAlign"><input type="submit" value="Submit"/></div>
