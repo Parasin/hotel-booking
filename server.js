@@ -2,6 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var _ = require('underscore');
 var db = require('./db.js');
+var data = require(__dirname + '/public/javascript/json.js');
 var bcrypt = require('bcryptjs');
 var middleware = require('./middleware.js')(db);
 var app = express();
@@ -276,5 +277,15 @@ app.post('/hotel', middleware.requireAuthentication, function (req, res) {
 db.sequelize.sync( {force: true} ).then(function () {
     app.listen(PORT, function () {
         console.log('Express listening on port ' + PORT);
+        //console.log(JSON.stringify(data));
+        for (var i = 0; i < data.users.length; i++) {
+            db.user.create(data.users[i]).then();
+        }
+        for (var i = 0; i < data.hotels.length; i++) {
+            db.hotel.create(data.hotels[i]).then();
+        }
+        for (var i = 0; i < data.rooms.length; i++) {
+            db.room.create(data.rooms[i]).then();
+        }
     });
 });
