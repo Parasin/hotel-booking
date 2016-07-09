@@ -104,7 +104,7 @@ app.get('/bookings/user', middleware.requireAuthentication, function (req, res) 
 
 /* POST Create new booking */
 app.post('/bookings', middleware.requireAuthentication, function (req, res) {
-    var body = _.pick(req.body, 'endDate', 'startDate', 'bookedAt', 'roomNumber');
+    var body = _.pick(req.body, 'endDate', 'startDate', 'bookedAt', 'roomNumber', 'hotelId');
     body.bookedBy = req.user.email;
     body.userId = req.user.get('id');
     body.availability = 'Unavailable';

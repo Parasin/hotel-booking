@@ -32,6 +32,7 @@ db.Sequelize = Sequelize;
 //db.roomType.belongsTo(db.room);
 db.hotel.hasMany(db.room);
 db.booking.hasMany(db.room);
+db.booking.hasMany(db.hotel);
 //db.userType.belongsTo(db.user);
 db.booking.belongsTo(db.user);
 db.user.hasMany(db.booking);
