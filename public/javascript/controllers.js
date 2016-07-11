@@ -97,6 +97,10 @@ app.controller('registerController', ['$scope', '$location', 'authFactory'
 
 app.controller('profileController', ['$rootScope', '$scope', '$location', 'authFactory', function ($rootScope, $scope, $location, authFactory) {
     $scope.userData = $rootScope.userData;
+    $scope.updatePass = function () {
+        
+    };
+    
     //console.log($scope.userData);
 }]);
 
