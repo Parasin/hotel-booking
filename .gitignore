@@ -5,5 +5,6 @@ data/*.sqlite
 /html_css_files/TableGenProject/nbproject/private/
 /html_css_files/TableGenProject/build/
 /html_css_files/TableGenProject/dist/
+server/data/*
 /nbproject/private/
 /public/nbproject/private/

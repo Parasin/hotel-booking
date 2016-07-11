@@ -12,7 +12,7 @@ app.controller('navController',
 }]);
 
 /* Login controller */
-app.controller('loginController', ['$scope', '$location', 'authFactory', '$cookies', '$route' , function ($scope, $location, authFactory, $cookies, $route) {
+app.controller('loginController', ['$rootScope', '$scope', '$location', 'authFactory', '$cookies', '$route' , function ($rootScope, $scope, $location, authFactory, $cookies, $route) {
         $scope.error;
         $scope.errorMessage;
 
@@ -23,10 +23,11 @@ app.controller('loginController', ['$scope', '$location', 'authFactory', '$cooki
             // call login from service
             authFactory.login($scope.loginForm.email, $scope.loginForm.password)
             // handle success
-            .then(function () {
+            .then(function (userData) {
                 $scope.error = false;
                 $scope.errorMessage = '';
                 $scope.loginForm = {};
+                $rootScope.userData = userData;
                 $location.path('/booking');
             }, function(err) {
                 $scope.error = true;
@@ -92,6 +93,11 @@ app.controller('registerController', ['$scope', '$location', 'authFactory'
                     $scope.errorMessage = JSON.stringify(err);
                 });
         };
+}]);
+
+app.controller('profileController', ['$rootScope', '$scope', '$location', 'authFactory', function ($rootScope, $scope, $location, authFactory) {
+    $scope.userData = $rootScope.userData;
+    //console.log($scope.userData);
 }]);
 
 /* Logout controller */
