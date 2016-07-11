@@ -35,7 +35,7 @@ app.controller('loginController', ['$rootScope', '$scope', '$location', 'authFac
                 console.log($scope.errorMessage);
             }).catch(function () {
                 $scope.error = true;
-                $scope.errorMessage = "Account does not exist with that email.";
+                $scope.errorMessage = "Account does not exist.";
                 $scope.loginForm = {};
             });
         };
@@ -74,6 +74,7 @@ app.controller('registerController', ['$scope', '$location', 'authFactory'
                     $scope.firstName = '';
                     $scope.lastName = '';
                     $scope.success = true;
+                    $location.path('/login');
                 }, function (err) {
                     $scope.error = true;
                     $scope.success = false;
@@ -95,13 +96,18 @@ app.controller('registerController', ['$scope', '$location', 'authFactory'
         };
 }]);
 
-app.controller('profileController', ['$rootScope', '$scope', '$location', 'authFactory', function ($rootScope, $scope, $location, authFactory) {
+app.controller('profileController', ['$rootScope', '$scope',  function ($rootScope, $scope) {
     $scope.userData = $rootScope.userData;
     $scope.updatePass = function () {
         
     };
     
     //console.log($scope.userData);
+}]);
+
+
+app.controller('bookingController', ['$rootScope', '$scope', '$mdSidenav', function ($rootScope, $scope, $mdSidenav) {
+    $scope.price = 500;
 }]);
 
 /* Logout controller */

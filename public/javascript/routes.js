@@ -17,7 +17,7 @@ app.config(['$routeProvider', function($routeProvider) {
     })
     .when('/booking', {
         templateUrl: 'BOOKING.html',
-        controller: ''
+        controller: 'bookingController'
         , access: {
             restricted: true
         }

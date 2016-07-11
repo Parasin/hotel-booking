@@ -1,4 +1,4 @@
-<div id="searchBar">
+<div class="booking" id="searchBar">
     <form method="post" action="xxxxxx.xxx">
         <div id="selectBed">
             <div class="labelAlign"><label>BED</label></div>
@@ -39,20 +39,20 @@
 
         <div id="pricePerNight">
             <div class="labelAlign">
-                <label id="priceLbl">PRICE ($<label id="sliderVal"></label>)</label>
+                <label id="priceLbl">PRICE (<!--$<label id="sliderVal"></label>-->${{ price }})</label>
             </div>
-                <div class="range-slider radius" data-slider id="slider">
+                <!--<div class="range-slider radius" data-slider id="slider">
                     <span class="range-slider-handle" role="slider" tabindex="0"></span>
                     <span class="range-slider-active-segment"></span>
                     <input type="range" id="sliderBar" value="150" min="50" max="1000" onChange="sliderChange(this.value)">
-                </div>
-            
+                </div>-->
             <div>
-                <script type="text/javascript">
+                <md-slider class="md-primary" flex min="0" max="3000" ng-model="price" aria-label="blue" id="blue-slider"></md-slider>
+                <!--<script type="text/javascript">
                     function sliderChange(val){
                         document.getElementById('sliderVal').innerHTML = val;
                     }
-                </script> 
+                </script> -->
             </div>
         </div>
         
