@@ -1,9 +1,9 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var _ = require('underscore');
-var db = require('./db.js');
-var data = require(__dirname + '/public/javascript/json.js');
-var middleware = require('./middleware.js')(db);
+var db = require(__dirname + '/server/db.js');
+var data = require(__dirname + '/server/json.js');
+var middleware = require(__dirname + '/server/middleware.js')(db);
 var app = express();
 
 var path = require('path');
@@ -17,7 +17,7 @@ app.get('/', function (req, res) {
 });
 
 app.use(bodyParser.json());
-require('./routes.js')(app, _, middleware, db, bodyParser);
+require(__dirname + '/server/routes.js')(app, _, middleware, db, bodyParser);
 
 
 // Sync the database
