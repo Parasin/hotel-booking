@@ -12,20 +12,30 @@
     
     <form name="registerForm" ng-submit="registerForm.$valid && register()">
         <div class="row form-group">
-            <div class="col-md-1 col-md-offset-4">
-                <label class="form-control-label" for="usrName">Email:</label>
-            </div>
-            <div class="col-md-2">
-                <input type="email" class="form-control" id="userName" ng-model="email" placeholder="Enter Email" required>
+            <div class="col-md-4 col-md-offset-4">
+                <md-input-container class="md-block">
+                    <label>Email</label>
+                    <input required type="email" md-minlength="6" name="userName" ng-model="email">        
+                </md-input-container>
             </div>
         </div>
         <div class="row form-group">
-            <div class="col-md-1 col-md-offset-4">
+            <div class="col-md-4 col-md-offset-4">
+                <md-input-container class="md-block">
+                    <label>Password</label>
+                    <input required type="password" md-minlength="7" name="password" ng-model="password">        
+                
+                <div ng-messages="registerForm.password.$error" || !registerForm.password.$valid>
+                    <div ng-message="required">Password must be at least 7 characters</div>
+                </div>
+                </md-input-container>
+            </div>
+            <!--<div class="col-md-1 col-md-offset-4">
                 <label class="form-control-label" for="pwd">Password:</label>
             </div>
             <div class="col-md-2">
                 <input type="password" class="form-control" id="pwd" ng-model="password" ng-minlength="7" placeholder="Password must be at least 7 characters" required>
-            </div>
+            </div>-->
         </div>
         <div class="row form-group">        
             <div class="col-md-1 col-md-offset-4">
@@ -36,7 +46,7 @@
             </div>
         </div>
         <div class="row form-group">
-            <div class="col-md-1 col-md-offset-4">
+           <div class="col-md-1 col-md-offset-4">
                 <label class="form-control-label" for="dob">Date of Birth:</label>
             </div>
             <div class="col-md-2">
