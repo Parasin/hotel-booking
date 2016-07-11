@@ -24,25 +24,28 @@
                 <md-input-container class="md-block">
                     <label>Password</label>
                     <input required type="password" md-minlength="7" name="password" ng-model="password">        
-                
-                <div ng-messages="registerForm.password.$error" || !registerForm.password.$valid>
-                    <div ng-message="required">Password must be at least 7 characters</div>
-                </div>
+                    <div ng-show="password.length < 7">
+                        <div ng-messages="confirmPassword.length < 7">
+                            <div ng-message="required">Must be at least 7 characters</div>
+                        </div>
+                    </div>
                 </md-input-container>
             </div>
-            <!--<div class="col-md-1 col-md-offset-4">
-                <label class="form-control-label" for="pwd">Password:</label>
-            </div>
-            <div class="col-md-2">
-                <input type="password" class="form-control" id="pwd" ng-model="password" ng-minlength="7" placeholder="Password must be at least 7 characters" required>
-            </div>-->
         </div>
         <div class="row form-group">        
-            <div class="col-md-1 col-md-offset-4">
-                <label class="form-control-label" for="pwdConfirm">Confirm Password:</label>
-            </div>
-            <div class="col-md-2">
-                <input type="password" class="form-control" id="pwdConfirm" ng-model="confirmPassword" ng-minlength="7" placeholder="Password must be at least 7 characters" required>
+            <div class="col-md-4 col-md-offset-4">
+                <md-input-container class="md-block">
+                    <label>Confirm Password</label>
+                    <input required type="password" md-minlength="7" name="confirmPassword" ng-model="confirmPassword">        
+                    <div ng-show="password !== confirmPassword || confirmPassword.length < 7">
+                        <div ng-messages="password !== confirmPassword">
+                            <div ng-message="required">Passwords do not match</div>
+                        </div>
+                        <div ng-messages="confirmPassword.length < 7">
+                            <div ng-message="required">Must be at least 7 characters</div>
+                        </div>
+                    </div>
+                </md-input-container>
             </div>
         </div>
         <div class="row form-group">
