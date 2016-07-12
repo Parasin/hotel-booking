@@ -42,20 +42,25 @@ app.controller('loginController', ['$rootScope', '$scope', '$location', 'authFac
 }]);
 
 /* Register controller */
-app.controller('registerController', ['$scope', '$location', 'authFactory'
-  , function ($scope, $location, authFactory) {
+app.controller('registerController', ['$scope', '$location', 'authFactory', '$timeout'
+  , function ($scope, $location, authFactory, $timeout) {
         $scope.email;
-        $scope.password = '';
-        $scope.confirmPassword = '';
+        $scope.password;
+        $scope.confirmPassword;
         $scope.dateOfBirth;
         $scope.firstName;
         $scope.lastName;
-      
+        $scope.processing;
         $scope.register = function () {
+            $scope.processing = true;
             // initial values
             $scope.error = false;
             $scope.success = false;
-
+            if ($scope.password !== $scope.confirmPassword) {
+                $scope.error = true;
+                $scope.errorMessage = 'Passwords must match';
+                return;
+            }
             // call register from service
             var data = {
                 email:$scope.email
@@ -64,21 +69,19 @@ app.controller('registerController', ['$scope', '$location', 'authFactory'
                 , firstName: $scope.firstName
                 , lastName: $scope.lastName
             };
+            
             authFactory.register(data)
                 // handle success
                 .then(function (data) {
-                    $scope.email = '';
-                    $scope.password = '';
-                    $scope.confirmPassword = '';
-                    $scope.dateOfBirth = '';
-                    $scope.firstName = '';
-                    $scope.lastName = '';
                     $scope.success = true;
-                    $location.path('/login');
+                    $scope.processing = false;
+                    $timeout(function () {
+                        $location.path('/login');
+                    }, 3000);
                 }, function (err) {
                     $scope.error = true;
                     $scope.success = false;
-                    //console.log(JSON.stringify(err));
+                    $scope.processing = false;
                     if (err.errors[0].message == 'Validation len failed' && err.errors[0].path == 'password') {
                         $scope.errorMessage = 'Password must be at least 7 characters!';
                     } else if (err.errors[0].message == 'email must be unique') {
@@ -91,6 +94,7 @@ app.controller('registerController', ['$scope', '$location', 'authFactory'
                     console.log('Big Error: ' + err);
                     $scope.error = true;
                     $scope.success = false;
+                    $scope.processing = false;
                     $scope.errorMessage = JSON.stringify(err);
                 });
         };
