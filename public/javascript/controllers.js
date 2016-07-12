@@ -12,14 +12,14 @@ app.controller('navController',
 }]);
 
 /* Login controller */
-app.controller('loginController', ['$rootScope', '$scope', '$location', 'authFactory', '$cookies', '$route' , function ($rootScope, $scope, $location, authFactory, $cookies, $route) {
+app.controller('loginController', ['$rootScope', '$scope', '$location', 'authFactory', '$cookies', '$route', '$timeout', function ($rootScope, $scope, $location, authFactory, $cookies, $route, $timeout) {
         $scope.error;
         $scope.errorMessage;
-
+        $scope.processing = false;
         $scope.login = function () {            
             // initial values
             $scope.error = false;
-
+            $scope.processing = true;
             // call login from service
             authFactory.login($scope.loginForm.email, $scope.loginForm.password)
             // handle success
@@ -28,12 +28,17 @@ app.controller('loginController', ['$rootScope', '$scope', '$location', 'authFac
                 $scope.errorMessage = '';
                 $scope.loginForm = {};
                 $rootScope.userData = userData;
-                $location.path('/booking');
+                $timeout(function () {
+                    $scope.processing = false;
+                    $location.path('/booking');
+                });
             }, function(err) {
+                $scope.processing = false;
                 $scope.error = true;
                 $scope.errorMessage = "Invalid username and/or password";
                 console.log($scope.errorMessage);
             }).catch(function () {
+                $scope.processing = false;
                 $scope.error = true;
                 $scope.errorMessage = "Account does not exist.";
                 $scope.loginForm = {};
