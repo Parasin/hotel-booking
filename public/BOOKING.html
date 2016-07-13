@@ -1,61 +1,86 @@
 <div class="booking" id="searchBar">
     <form method="post" action="xxxxxx.xxx">
-        <div id="selectBed">
-            <div class="labelAlign"><label>BED</label></div>
+        <div class="col-md-2" >
+            <md-input-container>
+                <md-select ng-model="bedNum" placeholder="Number of beds">
+                    <md-option ng-value="1">1</md-option>
+                    <md-option ng-value="2">2</md-option>
+                    <md-option ng-value="3">3</md-option>
+                </md-select>
+            </md-input-container>
+            
+            <!--<div class="labelAlign"><label>BED</label></div>
             <select class="form-control" id="bedNum">Number of Bed
                 <option value="">SELECT BEDS</option>
                 <option value="one">One</option>
                 <option value="two">Two</option>
                 <option value="three">Three</option>
-            </select>
+            </select>-->
         </div>
 
-        <div id="selectKitchen">
-            <div class="labelAlign"><label>KITCHEN</label></div>
-            <select class="form-control" id="bedNum">Number of Bed
+        <div class="col-md-2" >
+            <md-input-container>
+                <md-select ng-model="kitchen" placeholder="Kitchen">
+                    <md-option ng-value="0">No</md-option>
+                    <md-option ng-value="1">Yes</md-option>
+                </md-select>
+            </md-input-container>
+            
+            <!--<div class="labelAlign"><label>KITCHEN</label></div>
+            <select class="form-control" id="bedNum">Number of Kitchens
                 <option value="">SELECT KITCHEN</option>
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
-            </select>
+            </select>-->
         </div>
 
-        <div id="selectRoomType">
-            <div class="labelAlign"><label>ROOM TYPE</label></div>
-            <select class="form-control" id="bedNum">Number of Bed
+        <div class="col-md-2">
+            <md-input-container>
+                <md-select ng-model="roomTypes" placeholder="Room type">
+                    <md-option ng-value="Single Suite">Single Suite</md-option>
+                    <md-option ng-value="Double Suite">Double Suite</md-option>
+                    <md-option ng-value="Honeymoon Suite">Honeymoon Suite</md-option>
+                    <md-option ng-value="Presidential Suite">Presidential Suite</md-option>
+                </md-select>
+            </md-input-container>
+            
+            <!--<div class="labelAlign"><label>ROOM TYPE</label></div>
+            <select class="form-control" id="bedNum">Room Type
                 <option value="">SELECT ROOM TYPE</option>
                 <option value="type1">Type1</option>
                 <option value="type2">Type2</option>
-            </select>
+            </select>-->
         </div>
 
-        <div id="selectView">
-            <div class="labelAlign"><label>VIEW</label></div>
-            <select class="form-control" id="bedNum">Number of Bed
+        <div class="col-md-2">
+            <md-input-container>
+                <md-select ng-model="view" placeholder="View">
+                    <md-option ng-value="Single Suite">Skyline</md-option>
+                    <md-option ng-value="Double Suite">Beachfront</md-option>
+                    <md-option ng-value="Honeymoon Suite">Courtyard</md-option>
+                </md-select>
+            </md-input-container>
+            
+            <!--<div class="labelAlign"><label>VIEW</label></div>
+            <select class="form-control" id="bedNum">Viewd
                 <option value="">SELECT VIEW</option>
                 <option value="beachfront">Beach Front</option>
                 <option value="normal">Normal</option>
-            </select>
+            </select>-->
         </div>
 
         <div id="pricePerNight">
             <div class="labelAlign">
-                <label id="priceLbl">PRICE (<!--$<label id="sliderVal"></label>-->${{ price }})</label>
+                <p style="display: inline;  margin-bottom: 20px" id="priceLbl">PRICE (${{ price }})</p>
             </div>
-                <!--<div class="range-slider radius" data-slider id="slider">
-                    <span class="range-slider-handle" role="slider" tabindex="0"></span>
-                    <span class="range-slider-active-segment"></span>
-                    <input type="range" id="sliderBar" value="150" min="50" max="1000" onChange="sliderChange(this.value)">
-                </div>-->
             <div>
-                <md-slider class="md-primary" flex min="0" max="3000" ng-model="price" aria-label="blue" id="blue-slider"></md-slider>
-                <!--<script type="text/javascript">
-                    function sliderChange(val){
-                        document.getElementById('sliderVal').innerHTML = val;
-                    }
-                </script> -->
+                <md-slider-container>
+                    <md-slider class="md-primary" flex min="0" max="3000" ng-model="price" aria-label="blue" id="blue-slider"></md-slider>    
+                </md-slider-container>
+                
             </div>
         </div>
         
-        <div id="submitBtn"  class="labelAlign"><input type="submit" value="Submit"/></div>
+        <input style="border-radius: 0; margin-left: 15px" type="submit" class="btn btn-primary" value="Submit"/>
     </form>
 </div>

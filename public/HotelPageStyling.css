@@ -49,6 +49,12 @@ and open the template in the editor.
     color: red;
 }
 
+.bookBar {
+    padding-left: 4em;
+    padding-right: 4em;
+    display: inline-block;
+}
+
 #btn{
     margin-top: 20px;
 }
@@ -64,12 +70,12 @@ and open the template in the editor.
 #about_us{
     width: 75%;
     height: 100%;
-    border-radius: 10px 10px 10px 10px;
+    border-radius: 10px;
     margin: 0 auto;
     text-align: center;
-    border-style: solid solid solid solid;
+    border-style: solid;
     border-color: #EB8D05;
-    padding: 20px 20px 20px 20px;
+    padding: 20px;
     font-family: Josefin Slab;
     font-style: italic;
 }
@@ -80,8 +86,8 @@ and open the template in the editor.
 }
 
 #searchBar{
-    border: solid solid solid solid;
-    border-radius: 5px 5px 5px 5px;
+    border: solid;
+    border-radius: 5px;
     border-style: solid;
     border-color: #EB8D05;
     background-color: #EB8D05;
@@ -109,7 +115,7 @@ and open the template in the editor.
     border-radius: 10px; 
     border-color: darkblue; 
     border-style: solid; 
-    font-family="Josefin Slab"; 
+    font-family: "Josefin Slab"; 
     background-color: #ffa31a; 
     font-size: 18px; 
     text-align: center;
