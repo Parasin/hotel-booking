@@ -48,7 +48,7 @@ and open the template in the editor.
                     </ul>
                     <div class="pull-xs-right">
                         <ul class="nav navbar-nav navbar-right">
-                            <li ng-controller="logoutController" ><a href="#/" ng-click="logout()">LOGOUT</a></li>
+                            <li ng-controller="logoutController" ng-show="logoutEnabled"><a href="#/" ng-click="logout()">LOGOUT</a></li>
                             <!--<p>{{logoutEnabled}}</p>-->
                         </ul>
                     </div>
