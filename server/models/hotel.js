@@ -28,7 +28,8 @@ module.exports = function (sequelize, DataTypes) {
             "type": DataTypes.STRING
             , "allowNull": false
             , "validate": {
-                "isAlpha": true
+                is: ["^[a-z ]+$",'i']
+                , "notEmpty": true
             }
         }
         , "zipcode": {
@@ -43,7 +44,8 @@ module.exports = function (sequelize, DataTypes) {
             "type": DataTypes.STRING
             , "allowNull": false
             , "validate": {
-                "isAlpha": true
+                is: ["^[a-z ]+$",'i']
+                , "notEmpty": true
             }
         }
     });

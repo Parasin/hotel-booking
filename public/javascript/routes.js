@@ -10,14 +10,14 @@ app.config(['$routeProvider', function($routeProvider) {
     })
     .when('/profile', {
         templateUrl: 'PROFILE.html',
-        controller: ''
+        controller: 'profileController'
         , access: {
             restricted: true
         }
     })
     .when('/booking', {
         templateUrl: 'BOOKING.html',
-        controller: ''
+        controller: 'bookingController'
         , access: {
             restricted: false
         }

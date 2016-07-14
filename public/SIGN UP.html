@@ -5,63 +5,85 @@
 </div>
 
 <div id="signup_layout" ng-controller="registerController">
+    <div class="col-md-8 col-md-offset-3">
+        <md-progress-linear ng-show="processing" md-mode="indeterminate"></md-progress-linear>
+    </div>
     <div class="col-md-6 col-md-offset-3">
         <p class="alert alert-danger" ng-show="error">{{errorMessage}}</p>
-        <p class="alert alert-success" ng-show="success">Registration successful!</p>
+        <p style="text-align: center" class="alert alert-success" ng-show="success">Registration successful! Please wait while you are redirected...</p>
     </div>
     
     <form name="registerForm" ng-submit="registerForm.$valid && register()">
         <div class="row form-group">
-            <div class="col-md-1 col-md-offset-4">
-                <label class="form-control-label" for="usrName">Email:</label>
-            </div>
-            <div class="col-md-2">
-                <input type="email" class="form-control" id="userName" ng-model="email" placeholder="Enter Email" required>
+            <div class="col-md-4 col-md-offset-4">
+                <md-input-container class="md-block">
+                    <label>Email</label>
+                    <input name="email" ng-model="email" type="email" required ng-minlength="6">
+                    <div ng-show="registerForm.email.$dirty">
+                        <div ng-show="registerForm.email.$error.email" class="formError">Please enter a valid email</div>
+                        <div ng-show="registerForm.email.$error.minlength" class="formError">Email is not long enough</div>
+                    </div>
+                </md-input-container>
             </div>
         </div>
         <div class="row form-group">
-            <div class="col-md-1 col-md-offset-4">
-                <label class="form-control-label" for="pwd">Password:</label>
-            </div>
-            <div class="col-md-2">
-                <input type="password" class="form-control" id="pwd" ng-model="password" ng-minlength="7" placeholder="Password must be at least 7 characters" required>
+            <div class="col-md-4 col-md-offset-4">
+                <md-input-container class="md-block">
+                    <label>Password</label>
+                    <input required type="password" ng-minlength="7" name="password" ng-model="password">
+                    <div ng-show="registerForm.password.$dirty && registerForm.confirmPassword.$dirty">
+                        <div ng-show="registerForm.password.$error.required" class="formError">Field cannot be empty</div>
+                        <div ng-show="registerForm.password.$error.minlength" class="formError">Password must be at least 7 characters</div>
+                    </div>
+                </md-input-container>
             </div>
         </div>
         <div class="row form-group">        
-            <div class="col-md-1 col-md-offset-4">
-                <label class="form-control-label" for="pwdConfirm">Confirm Password:</label>
-            </div>
-            <div class="col-md-2">
-                <input type="password" class="form-control" id="pwdConfirm" ng-model="confirmPassword" ng-minlength="7" placeholder="Password must be at least 7 characters" required>
+            <div class="col-md-4 col-md-offset-4">
+                <md-input-container class="md-block">
+                    <label>Confirm Password</label>
+                    <input required type="password" ng-minlength="7" name="confirmPassword" ng-model="confirmPassword">
+                    <div ng-show="registerForm.confirmPassword.$dirty">
+                        <div ng-show="registerForm.password.$error.required" class="formError">Field cannot be empty</div>
+                        <div ng-show="registerForm.password.$error.minlength" class="formError">Password must be at least 7 characters</div>
+                        <div ng-show="registerForm.password.$viewValue !== registerForm.confirmPassword.$viewValue" class="formError">Password do not match</div>
+                    </div>
+                </md-input-container>
             </div>
         </div>
         <div class="row form-group">
-            <div class="col-md-1 col-md-offset-4">
+            <div class="col-md-4 col-md-offset-4">
+                <md-input-container class="md-block">
+                    <label>First name</label>
+                    <input type="text" ng-model="firstName" required>
+                    <div ng-show="registerForm.firstName.$dirty">
+                        <div ng-show="registerForm.firstName.$error.required" class="formError">Field cannot be empty</div>
+                    </div>
+                </md-input-container>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-4 col-md-offset-4">
+                <md-input-container class="md-block">
+                    <label>Last name</label>
+                    <input type="text" ng-model="lastName" required>
+                    <div ng-show="registerForm.lastName.$dirty">
+                        <div ng-show="registerForm.lastName.$error.required" class="formError">Field cannot be empty</div>
+                    </div>
+                </md-input-container>
+            </div>
+        </div>
+        <div class="row form-group">
+           <div class="col-md-1 col-md-offset-4">
                 <label class="form-control-label" for="dob">Date of Birth:</label>
             </div>
             <div class="col-md-2">
                 <input type="date" class="form-control" id="dob" ng-model="dateOfBirth" required>
             </div>
         </div>
-        <div class="row form-group">
-            <div class="col-md-1 col-md-offset-4">
-                <label class="form-control-label" for="fstName">First name:</label>
-            </div>
-            <div class="col-md-2">
-                <input type="text" class="form-control" id="fstName" ng-model="firstName" required>
-            </div>
-        </div>
-        <div class="row form-group">
-            <div class="col-md-1 col-md-offset-4">
-                <label class="form-control-label" for="lstName">Last name:</label>
-            </div>
-            <div class="col-md-2">
-                <input type="text" class="form-control" id="lstName" ng-model="lastName" required>
-            </div>
-        </div>
         <div class="row" id="btn">
             <div class="col-md-2 col-md-offset-5">
-                <button class="btn btn-primary btn-block" type="submit" id="signUpBtn" ng-diabled="disabled">Sign Up</button>
+                <button style="border-radius: 0" class="btn btn-primary btn-block" type="submit" id="signUpBtn" ng-diabled="disabled">Sign Up</button>
             </div>
         </div>
     </form>

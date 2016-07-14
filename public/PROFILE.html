@@ -10,15 +10,22 @@
 <div id="profile_header" class="col-xs-6 col-xs-offset-3">
     
     <!-- TODO:
+        ** William: Please see the section below the form, this should be how we access live data
+                    for the logged in user. Currently, this is the only data available. We can use
+                    a form to submit password changes though. 
+
+                    The section that I (Evan) created needs some better formatting to look nice on the page
+                    could you create the CSS or necessary changes to update the presentation of the data?
+
         1. Display actual values?
         2. Action buttons to change values?
     -->
     
-    <form class="form-horizontal" role="form">
+    <!--<form class="form-horizontal" role="form">
         
          <div class="form-group">
              <label for="username">Username</label>
-             <input type="email" class="form-control" id="username" value="username123">
+             <input type="text" class="form-control" id="username" value={{user.data.email}} readonly>
          </div>
         
          <div class="form-group">
@@ -56,7 +63,16 @@
              <input type="password" class="form-control" id="pwd" data-toggle="password">
          </div>
         
-    </form>
+    </form>-->
+    
+    <div class="row">
+        <div class="col-md-8 col-md-offset-3">
+            <p>Email: {{ userData.email }}</p>
+            <p>First Name: {{ userData.firstName }}</p>
+            <p>Last Name: {{ userData.lastName }}</p>
+            <p>Date of Birth: {{ userData.dateOfBirth | date:'longDate' }}</p>
+        </div>
+    </div>
     
 </div>
 

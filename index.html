@@ -6,31 +6,21 @@ and open the template in the editor.
 -->
 <html ng-app="bookingApp">
     <head>
-        <title>Hotel Booking - Home</title>
+        <title>Hotel Booking</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+        
         <!-- jQuery library -->
         <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
         <!-- Latest compiled JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-        <script src="/javascript/angular.min.js"></script>
-        <script src="/javascript/angular-animate.min.js"></script>
-        <script src="/javascript/angular-resource.min.js"></script>
-        <script src="/javascript/angular-route.min.js"></script>
-        <script src="/javascript/angular-cookies.min.js"></script>
-        <script src="/javascript/app.js"></script>
-        <script src="/javascript/routes.js"></script>
-        <script src="/javascript/bookingApp.js"></script>
-        <script src="/javascript/directives.js"></script>
-        <script src="/javascript/authFactory.js"></script>
-        <script src="/javascript/controllers.js"></script>
-        <script src="/javascript/underscore-min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>        
         <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Tangerine">
+        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" type="text/css" href="HotelPageStyling.css">
     </head>
     <body>
@@ -58,7 +48,7 @@ and open the template in the editor.
                     </ul>
                     <div class="pull-xs-right">
                         <ul class="nav navbar-nav navbar-right">
-                            <li ng-controller="logoutController" ><a href="#/" ng-click="logout()">LOGOUT</a></li>
+                            <li ng-controller="logoutController" ng-show="logoutEnabled"><a href="#/" ng-click="logout()">LOGOUT</a></li>
                             <!--<p>{{logoutEnabled}}</p>-->
                         </ul>
                     </div>
@@ -71,5 +61,20 @@ and open the template in the editor.
         <div>
             <div class="containter" ng-view></div>
         </div>
+        <script src="/javascript/angular.min.js"></script>
+        <script src="/javascript/angular-animate.min.js"></script>
+        <script src="/javascript/angular-resource.min.js"></script>
+        <script src="/javascript/angular-route.min.js"></script>
+        <script src="/javascript/angular-cookies.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+        <script src="/javascript/app.js"></script>
+        <script src="/javascript/routes.js"></script>
+        <script src="/javascript/bookingApp.js"></script>
+        <script src="/javascript/directives.js"></script>
+        <script src="/javascript/authFactory.js"></script>
+        <script src="/javascript/controllers.js"></script>
+        <script src="/javascript/underscore-min.js"></script>
     </body>
 </html>
