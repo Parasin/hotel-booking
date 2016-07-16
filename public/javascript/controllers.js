@@ -117,6 +117,14 @@ app.controller('profileController', ['$rootScope', '$scope',  function ($rootSco
 
 app.controller('bookingController', ['$rootScope', '$scope', '$mdSidenav', function ($rootScope, $scope, $mdSidenav) {
     $scope.price = 500;
+    $scope.bedNum;
+    $scope.kitchen;
+    $scope.roomTypes;
+    $scope.view;
+    $scope.results;
+    $scope.findRoom = function(){
+        //..............//////
+    }
 }]);
 
 /* Logout controller */
