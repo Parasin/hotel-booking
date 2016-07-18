@@ -15,7 +15,7 @@ app.config(['$routeProvider', function($routeProvider) {
             restricted: true
         }
     })
-    .when('/booking', {
+    .when('/bookings', {
         templateUrl: 'BOOKING.html',
         controller: 'bookingController'
         , access: {

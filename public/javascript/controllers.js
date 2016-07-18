@@ -3,25 +3,24 @@ app.controller('homeController', ['$scope', '$resource', '$location', 'authentic
 }]);
 
 /* Main controller */
-app.controller('navController',
-    ['$scope', '$location', 'authFactory', function($scope, $location, authFactory) {
-       // $scope.logoutEnabled = authFactory.isLoggedIn();
-         $scope.isActive = function (viewLocation) { 
-            return viewLocation === $location.path();
-        };
+app.controller('navController', ['$scope', '$location', 'authFactory', function ($scope, $location, authFactory) {
+    // $scope.logoutEnabled = authFactory.isLoggedIn();
+    $scope.isActive = function (viewLocation) {
+        return viewLocation === $location.path();
+    };
 }]);
 
 /* Login controller */
 app.controller('loginController', ['$rootScope', '$scope', '$location', 'authFactory', '$cookies', '$route', '$timeout', function ($rootScope, $scope, $location, authFactory, $cookies, $route, $timeout) {
-        $scope.error;
-        $scope.errorMessage;
-        $scope.processing = false;
-        $scope.login = function () {            
-            // initial values
-            $scope.error = false;
-            $scope.processing = true;
-            // call login from service
-            authFactory.login($scope.loginForm.email, $scope.loginForm.password)
+    $scope.error;
+    $scope.errorMessage;
+    $scope.processing = false;
+    $scope.login = function () {
+        // initial values
+        $scope.error = false;
+        $scope.processing = true;
+        // call login from service
+        authFactory.login($scope.loginForm.email, $scope.loginForm.password)
             // handle success
             .then(function (userData) {
                 $scope.error = false;
@@ -30,9 +29,9 @@ app.controller('loginController', ['$rootScope', '$scope', '$location', 'authFac
                 $rootScope.userData = userData;
                 $timeout(function () {
                     $scope.processing = false;
-                    $location.path('/booking');
+                    $location.path('/bookings');
                 });
-            }, function(err) {
+            }, function (err) {
                 $scope.processing = false;
                 $scope.error = true;
                 $scope.errorMessage = "Invalid username and/or password";
@@ -43,12 +42,14 @@ app.controller('loginController', ['$rootScope', '$scope', '$location', 'authFac
                 $scope.errorMessage = "Account does not exist.";
                 $scope.loginForm = {};
             });
-        };
+    };
 }]);
 
 /* Register controller */
 app.controller('registerController', ['$scope', '$location', 'authFactory', '$timeout'
-  , function ($scope, $location, authFactory, $timeout) {
+
+    
+    , function ($scope, $location, authFactory, $timeout) {
         $scope.email;
         $scope.password;
         $scope.confirmPassword;
@@ -68,13 +69,13 @@ app.controller('registerController', ['$scope', '$location', 'authFactory', '$ti
             }
             // call register from service
             var data = {
-                email:$scope.email
+                email: $scope.email
                 , password: $scope.password
                 , dateOfBirth: $scope.dateOfBirth
                 , firstName: $scope.firstName
                 , lastName: $scope.lastName
             };
-            
+
             authFactory.register(data)
                 // handle success
                 .then(function (data) {
@@ -105,31 +106,75 @@ app.controller('registerController', ['$scope', '$location', 'authFactory', '$ti
         };
 }]);
 
-app.controller('profileController', ['$rootScope', '$scope',  function ($rootScope, $scope) {
+app.controller('profileController', ['$rootScope', '$scope', function ($rootScope, $scope) {
     $scope.userData = $rootScope.userData;
     $scope.updatePass = function () {
-        
+
     };
-    
+
     //console.log($scope.userData);
 }]);
 
 
-app.controller('bookingController', ['$rootScope', '$scope', '$mdSidenav', function ($rootScope, $scope, $mdSidenav) {
+app.controller('bookingController', ['$log', '$rootScope', '$scope', '$mdSidenav', '$q', '$timeout', '$http', '$location', '$cookies', function ($log, $rootScope, $scope, $mdSidenav, $q, $timeout, $http, $location, $cookies) {
     $scope.price = 500;
+    $scope.startDate = '';
+    $scope.endDate = '';
+    $scope.roomType = '';
+    $scope.numBed = 1;
+    $scope.kitchen = '';
+    $scope.view = '';
+    //$scope.data = [];
+    $scope.error;
+    $scope.searchBookings = function () {
+        if ($scope.kitchen === 'Yes') {
+            $scope.kitchen = 1;
+        } else {
+            $scope.kitchen = 0;
+        }
+    
+        $location.search({
+            roomType: $scope.roomType || ['Single Suite', 'Double Suite', 'Economy Suite', 'Presidential Suite', 'Honeymoon Suite']
+            , pricePerNight: $scope.price
+            , kitchen: $scope.kitchen
+            , view: $scope.view
+            , numBed: $scope.numBed
+        });
+        
+        /*console.log($location);
+        console.log($location.url());*/
+        var req = {
+            method: 'GET'  
+            , url: $location.url()
+            , headers: {
+                Auth: $cookies.get('Auth')
+            }
+        };
+
+        $http(req).then(function (result) {
+            $scope.rooms = {array: []};
+            $scope.rooms.array = result.data;
+            $scope.error = null;
+            //$scope.$apply();
+            $log.info('Success: ' + JSON.stringify($scope.rooms)+'\n'+$scope.rooms.array.length);
+            /*for (var i = 0; i < $scope.data.length; i++) {
+                $log.info(JSON.stringify($scope.data[i]));
+            }*/
+        }, function (err) {
+            $scope.error = err.error;
+            $log.error('Error retrieving bookings: ' + JSON.stringify(err));
+        });
+    };
 }]);
 
 /* Logout controller */
-app.controller('logoutController', ['$scope', '$location', 'authFactory', '$cookies'
-  , function ($scope, $location, authFactory, $cookies) {
+app.controller('logoutController', ['$scope', '$location', 'authFactory', '$cookies', function ($scope, $location, authFactory, $cookies) {
         $scope.logout = function () {
             if (!authFactory.isLoggedIn()) {
                 return;
             }
             // call logout from service
             authFactory.logout()
-                .then(function (data) {
-                }, function (err) {
-            });
+                .then(function (data) {}, function (err) {});
         };
 }]);

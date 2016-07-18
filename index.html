@@ -40,7 +40,7 @@ and open the template in the editor.
                     <ul class="nav navbar-nav">
                         <li ng-class="{active: isActive('/')}"><a href="#/">HOME</a></li>
                         <li ng-class="{active: isActive('/profile')}"><a href="#/profile">PROFILE</a></li>
-                        <li ng-class="{active: isActive('/booking')}"><a href="#/booking">BOOKING</a></li>
+                        <li ng-class="{active: isActive('/bookings')}"><a href="#/bookings">BOOKING</a></li>
                         <li ng-class="{active: isActive('/login')}"><a href="#/login">LOG IN</a></li>
                         <li ng-class="{active: isActive('/signup')}"><a href="#/signup">SIGN UP</a></li>
                         <li ng-class="{active: isActive('/aboutUs')}"><a href="#/aboutUs">ABOUT US</a></li>
@@ -59,7 +59,7 @@ and open the template in the editor.
       
         <!--Home Page content -->
         <div>
-            <div class="containter" ng-view></div>
+            <div class="containter-fluid" ng-view></div>
         </div>
         <script src="/javascript/angular.min.js"></script>
         <script src="/javascript/angular-animate.min.js"></script>

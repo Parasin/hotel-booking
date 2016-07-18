@@ -26,7 +26,7 @@ module.exports = function (app, _, middleware, db, bodyParser) {
 
     /* GET all available bookings */
     app.get('/bookings', middleware.requireAuthentication, function (req, res) {
-        var query = _.pick(req.query, 'endDate', 'startDate', 'availability', 'roomNumber', 'pricePerNight', 'roomType');
+        var query = _.pick(req.query, 'endDate', 'startDate', 'availability', 'roomNumber', 'pricePerNight', 'roomType', 'numBed');
         var where = {};
         var rooms = {};
 
@@ -40,6 +40,9 @@ module.exports = function (app, _, middleware, db, bodyParser) {
         }
         if (query.hasOwnProperty('roomType')) {
             where.roomType = query.roomType;
+        }
+        if (query.hasOwnProperty('numBed')) {
+            where.numBed = query.numBed;
         }
         where.inService = 1;
 

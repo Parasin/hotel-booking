@@ -98,14 +98,20 @@ module.exports = function (sequelize, DataTypes) {
                 return new Promise(function (resolve, reject) {
                     try {
                         var where = {};
+                        var desiredStartDate;
+                        var desiredEndDate;
                         if (query.hasOwnProperty('roomNumber')) {
                             where.roomNumber = query.roomNumber;
                         }
                         if (query.hasOwnProperty('endDate')) {
                             where.endDate = Date.parse(query.endDate);
+                        } else {
+                            where.endDate = Date.now();
                         }
                         if (query.hasOwnProperty('startDate')) {
                             where.startDate = Date.parse(query.startDate);
+                        } else {
+                            where.startDate = Date.now();
                         }
                         if (query.hasOwnProperty('availability')) {
                             where.availability = query.availability;
@@ -116,9 +122,9 @@ module.exports = function (sequelize, DataTypes) {
                         booking.findAll({
                             "where": where
                         }).then(function (bookings) {
-                            var desiredStartDate = Date.parse(query.startDate.toString());
-                            var desiredEndDate = Date.parse(query.endDate.toString());
-
+                            desiredStartDate = where.startDate;
+                            desiredEndDate = where.endDate;
+                            
                             for (var i = 0; i < bookings.length; i++) {
                                 var bookingStart = Date.parse(bookings[i].startDate);
                                 var bookingEnd = Date.parse(bookings[i].endDate);
@@ -131,7 +137,7 @@ module.exports = function (sequelize, DataTypes) {
                                 }
                             }
                             for (var i = 0; i < rooms.length; i++) {
-                                rooms[i] = _.pick(rooms[i], 'roomNumber', 'roomType', 'pricePerNight');
+                                rooms[i] = _.pick(rooms[i], 'id', 'roomType', 'pricePerNight', 'view', 'kitchen', 'numBed');
                             }
                             
                             if (!_.isEmpty(rooms)) {

@@ -6,7 +6,7 @@ app.run(function ($rootScope, $location, $route, authFactory) {
       $location.path('/login');
       $route.reload();
     } else if (next.templateUrl === 'LOG IN.html' && authFactory.isLoggedIn() === true) {
-        $location.path('/booking');
+        $location.path('/bookings');
         $route.reload();
     }
   });
