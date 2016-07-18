@@ -118,6 +118,7 @@ app.controller('profileController', ['$rootScope', '$scope', function ($rootScop
 
 app.controller('bookingController', ['$log', '$rootScope', '$scope', '$mdSidenav', '$q', '$timeout', '$http', '$location', '$cookies', function ($log, $rootScope, $scope, $mdSidenav, $q, $timeout, $http, $location, $cookies) {
     $scope.price = 500;
+<<<<<<< HEAD
     $scope.startDate = '';
     $scope.endDate = '';
     $scope.roomType = '';
@@ -165,6 +166,16 @@ app.controller('bookingController', ['$log', '$rootScope', '$scope', '$mdSidenav
             $log.error('Error retrieving bookings: ' + JSON.stringify(err));
         });
     };
+=======
+    $scope.bedNum;
+    $scope.kitchen;
+    $scope.roomTypes;
+    $scope.view;
+    $scope.results;
+    $scope.findRoom = function(){
+        //..............//////
+    }
+>>>>>>> 8f6b5f472bae2c869cb90d6674de759087e92c92
 }]);
 
 /* Logout controller */
