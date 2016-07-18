@@ -2,34 +2,19 @@
     <form>
         <div class="col-xs-12 col-md-2" >
             <md-input-container>
-                <md-select ng-model="numBed" placeholder="Number of beds" required>
+                <md-select ng-model="numBed" placeholder="Number of Beds">
                     <md-option>1</md-option>
                     <md-option>2</md-option>
                     <md-option>3</md-option>
-<div class="booking" id="searchBar" ng-controller="bookingController">
-    <form method="post" action="xxxxxx.xxx">
-        <div class="col-xs-12 col-md-2" >
-            <md-input-container>
-                <md-select ng-model="bookingController.bedNum" placeholder="Number of beds">
-                    <md-option ng-value="1">1</md-option>
-                    <md-option ng-value="2">2</md-option>
-                    <md-option ng-value="3">3</md-option>
-
                 </md-select>
             </md-input-container>
         </div>
 
         <div class="col-xs-12 col-md-2">
             <md-input-container>
-
-                <md-select ng-model="kitchen" placeholder="Kitchen" required>
+                <md-select ng-model="kitchen" placeholder="Kitchen">
                     <md-option>No</md-option>
                     <md-option>Yes</md-option>
-
-                <md-select ng-model="bookingController.kitchen" placeholder="Kitchen">
-                    <md-option ng-value="0">No</md-option>
-                    <md-option ng-value="1">Yes</md-option>
-
                 </md-select>
             </md-input-container>
         </div>
@@ -37,32 +22,21 @@
         <div class="col-xs-12 col-md-2">
             <md-input-container>
 
-                <md-select ng-model="roomType" placeholder="Room type" required>
+                <md-select ng-model="roomType" placeholder="Room Type">
                     <md-option>Single Suite</md-option>
                     <md-option>Double Suite</md-option>
                     <md-option>Honeymoon Suite</md-option>
                     <md-option>Presidential Suite</md-option>
-
-                <md-select ng-model="bookingController.roomTypes" placeholder="Room type">
-                    <md-option ng-value="Single">Single Suite</md-option>
-                    <md-option ng-value="Double">Double Suite</md-option>
-                    <md-option ng-value="Honeymoon">Honeymoon Suite</md-option>
-                    <md-option ng-value="Presidential">Presidential Suite</md-option>
-
                 </md-select>
             </md-input-container>
         </div>
 
         <div class="col-xs-12 col-md-2">
             <md-input-container>
-                <md-select ng-model="view" placeholder="View" required>
+                <md-select ng-model="view" placeholder="View">
                     <md-option>Skyline</md-option>
                     <md-option>Beachfront</md-option>
                     <md-option>Courtyard</md-option>
-                <md-select ng-model="bookingController.view" placeholder="View">
-                    <md-option ng-value="Skyline">Skyline</md-option>
-                    <md-option ng-value="Beachfront">Beachfront</md-option>
-                    <md-option ng-value="Courtyard">Courtyard</md-option>
                 </md-select>
             </md-input-container>
         </div>
