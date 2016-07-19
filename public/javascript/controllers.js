@@ -48,6 +48,7 @@ app.controller('loginController', ['$rootScope', '$scope', '$location', 'authFac
 /* Register controller */
 app.controller('registerController', ['$scope', '$location', 'authFactory', '$timeout'
 
+
     
     , function ($scope, $location, authFactory, $timeout) {
         $scope.email;
@@ -116,7 +117,7 @@ app.controller('profileController', ['$rootScope', '$scope', function ($rootScop
 }]);
 
 
-app.controller('bookingController', ['$log', '$rootScope', '$scope', '$mdSidenav', '$q', '$timeout', '$http', '$location', '$cookies', function ($log, $rootScope, $scope, $mdSidenav, $q, $timeout, $http, $location, $cookies) {
+app.controller('bookingController', ['$resource', '$log', '$rootScope', '$scope', '$mdSidenav', '$q', '$http', '$location', '$cookies', function ($resource, $log, $rootScope, $scope, $mdSidenav, $q, $http, $location, $cookies) {
     $scope.price = 500;
     $scope.startDate = '';
     $scope.endDate = '';
@@ -124,7 +125,11 @@ app.controller('bookingController', ['$log', '$rootScope', '$scope', '$mdSidenav
     $scope.numBed = 1;
     $scope.kitchen = '';
     $scope.view = '';
-    //$scope.data = [];
+    var changed =  false;
+    $scope.rooms = {
+        array: []
+    };
+    var data = [];
     $scope.error;
     $scope.searchBookings = function () {
         if ($scope.kitchen === 'Yes') {
@@ -132,49 +137,60 @@ app.controller('bookingController', ['$log', '$rootScope', '$scope', '$mdSidenav
         } else {
             $scope.kitchen = 0;
         }
-    
+
         $location.search({
             roomType: $scope.roomType || ['Single Suite', 'Double Suite', 'Economy Suite', 'Presidential Suite', 'Honeymoon Suite']
-            , pricePerNight: $scope.price
-            , kitchen: $scope.kitchen
-            , view: $scope.view
-            , numBed: $scope.numBed
+            , pricePerNight: $scope.price || 5000
+            , kitchen: $scope.kitchen || [0, 1]
+            , view: $scope.view || ['Courtyard', 'Skyline', 'Beachfront']
+            , numBed: $scope.numBed || [1, 2, 3]
+        });
+
+        
+        var Rooms =  $resource('/bookings/?', $location.search(), {
+            query: {
+                method: 'GET'
+                , isArray: true
+                , headers: {
+                    Auth: $cookies.get('Auth')
+                }
+            }
         });
         
-        /*console.log($location);
-        console.log($location.url());*/
-        var req = {
-            method: 'GET'  
-            , url: $location.url()
-            , headers: {
-                Auth: $cookies.get('Auth')
-            }
-        };
-
-        $http(req).then(function (result) {
-            $scope.rooms = {array: []};
-            $scope.rooms.array = result.data;
+        /*request($location.url())*/
+        /*$http(req)*/
+        Rooms.query().$promise.then(function (result) {
+            data = result;
             $scope.error = null;
+            changed = true;
+            $log.debug('Value of changed: ' + changed);
+            $log.debug('Result: ' + JSON.stringify(result));
+            //$scope.rooms.array = result;
             //$scope.$apply();
-            $log.info('Success: ' + JSON.stringify($scope.rooms)+'\n'+$scope.rooms.array.length);
-            /*for (var i = 0; i < $scope.data.length; i++) {
-                $log.info(JSON.stringify($scope.data[i]));
-            }*/
+            //$log.info('Success: ' + JSON.stringify($scope.rooms.array));
+            $log.info('Num rooms: ' + data.length);
+            $scope.$watch(changed, function () {
+                
+                    $log.debug('WE CHANGED ROOMS ARRAY');
+                    $scope.rooms.array = data;
+                    $log.debug('ROOMS ARR: ' + JSON.stringify($scope.rooms.array));
+                
+            });
         }, function (err) {
-            $scope.error = err.error;
-            $log.error('Error retrieving bookings: ' + JSON.stringify(err));
-        });
+            $scope.error = err.data.error;
+            //$log.error('Error retrieving bookings: ' + JSON.stringify(err.data));
+        });  
     };
 }]);
 
 /* Logout controller */
 app.controller('logoutController', ['$scope', '$location', 'authFactory', '$cookies', function ($scope, $location, authFactory, $cookies) {
-        $scope.logout = function () {
-            if (!authFactory.isLoggedIn()) {
-                return;
-            }
-            // call logout from service
-            authFactory.logout()
-                .then(function (data) {}, function (err) {});
-        };
+    $scope.logout = function () {
+        if (!authFactory.isLoggedIn()) {
+            return;
+        }
+        // call logout from service
+        authFactory.logout()
+            .then(function (data) {}, function (err) {});
+    };
 }]);
