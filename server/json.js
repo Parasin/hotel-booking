@@ -232,5 +232,78 @@ data.rooms = [
         , "hotelId": 9
     }
 ];
+data.bookings[
+    {
+        "bookedBy": "Daniel"
+        ,"roomNumber": 1
+        ,"startDate": "07 22 2016"
+        ,"endDate": "07 31 2016"
+        ,"availability": "available"
+        ,"userId": 1
+    },{
+        "bookedBy": "Scott"
+        ,"roomNumber": 2
+        ,"startDate": "07 15 2016"
+        ,"endDate": "07 23 2016"
+        ,"availability": "available"
+        ,"userId": 2
+    },{
+        "bookedBy": "Jason"
+        ,"roomNumber": 3
+        ,"startDate": "08 02 2016"
+        ,"endDate": "08 07 2016"
+        ,"availability": "available"
+        ,"userId": 3
+    },{
+        "bookedBy": "Mathew"
+        ,"roomNumber": 4
+        ,"startDate": "08 05 2016"
+        ,"endDate": "08 10 2016"
+        ,"availability": "available"
+        ,"userId": 4
+    },{
+        "bookedBy": "Jessica"
+        ,"roomNumber": 5
+        ,"startDate": "08 15 2016"
+        ,"endDate": "08 22 2016"
+        ,"availability": "available"
+        ,"userId": 5
+    },{
+        "bookedBy": "Jane"
+        ,"roomNumber": 6
+        ,"startDate": "07 28 2016"
+        ,"endDate": "08 05 2016"
+        ,"availability": "available"
+        ,"userId": 6
+    },{
+        "bookedBy": "Jimmy"
+        ,"roomNumber": 7
+        ,"startDate": "09 01 2016"
+        ,"endDate": "09 06 2016"
+        ,"availability": "available"
+        ,"userId": 7
+    },{
+        "bookedBy": "Karen"
+        ,"roomNumber": 8
+        ,"startDate": "09 15 2016"
+        ,"endDate": "09 20 2016"
+        ,"availability": "available"
+        ,"userId": 8
+    },{
+        "bookedBy": "John"
+        ,"roomNumber": 9
+        ,"startDate": "07 23 2016"
+        ,"endDate": "08 10 2016"
+        ,"availability": "available"
+        ,"userId": 9
+    },{
+        "bookedBy": "Charlotte"
+        ,"roomNumber": 10
+        ,"startDate": "08 12 2016"
+        ,"endDate": "08 18 2016"
+        ,"availability": "available"
+        ,"userId": 10
+    }
+];
 
 module.exports = data;
