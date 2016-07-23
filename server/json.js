@@ -234,70 +234,70 @@ data.rooms = [
 ];
 data.bookings[
     {
-        "bookedBy": "Daniel"
+        "bookedBy": "test@gmail.com"
         ,"roomNumber": 1
         ,"startDate": "07 22 2016"
         ,"endDate": "07 31 2016"
         ,"availability": "available"
         ,"userId": 1
     },{
-        "bookedBy": "Scott"
+        "bookedBy": "test2@gmail.com"
         ,"roomNumber": 2
         ,"startDate": "07 15 2016"
         ,"endDate": "07 23 2016"
         ,"availability": "available"
         ,"userId": 2
     },{
-        "bookedBy": "Jason"
+        "bookedBy": "test3@gmail.com"
         ,"roomNumber": 3
         ,"startDate": "08 02 2016"
         ,"endDate": "08 07 2016"
         ,"availability": "available"
         ,"userId": 3
     },{
-        "bookedBy": "Mathew"
+        "bookedBy": "test4@gmail.com"
         ,"roomNumber": 4
         ,"startDate": "08 05 2016"
         ,"endDate": "08 10 2016"
         ,"availability": "available"
         ,"userId": 4
     },{
-        "bookedBy": "Jessica"
+        "bookedBy": "test5@gmail.com"
         ,"roomNumber": 5
         ,"startDate": "08 15 2016"
         ,"endDate": "08 22 2016"
         ,"availability": "available"
         ,"userId": 5
     },{
-        "bookedBy": "Jane"
+        "bookedBy": "test6@gmail.com"
         ,"roomNumber": 6
         ,"startDate": "07 28 2016"
         ,"endDate": "08 05 2016"
         ,"availability": "available"
         ,"userId": 6
     },{
-        "bookedBy": "Jimmy"
+        "bookedBy": "test7@gmail.com"
         ,"roomNumber": 7
         ,"startDate": "09 01 2016"
         ,"endDate": "09 06 2016"
         ,"availability": "available"
         ,"userId": 7
     },{
-        "bookedBy": "Karen"
+        "bookedBy": "test8@gmail.com"
         ,"roomNumber": 8
         ,"startDate": "09 15 2016"
         ,"endDate": "09 20 2016"
         ,"availability": "available"
         ,"userId": 8
     },{
-        "bookedBy": "John"
+        "bookedBy": "test9@gmail.com"
         ,"roomNumber": 9
         ,"startDate": "07 23 2016"
         ,"endDate": "08 10 2016"
         ,"availability": "available"
         ,"userId": 9
     },{
-        "bookedBy": "Charlotte"
+        "bookedBy": "test10@gmail.com"
         ,"roomNumber": 10
         ,"startDate": "08 12 2016"
         ,"endDate": "08 18 2016"
