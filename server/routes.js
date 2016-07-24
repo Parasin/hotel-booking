@@ -222,7 +222,7 @@ module.exports = function (app, _, middleware, db, bodyParser) {
     });
 
     /* PUT users */
-    app.put('/users', function (req, res) {
+    app.put('/users', middleware.requireAuthentication, function (req, res) {
         var body = _.pick(req.body, 'email', 'password', 'newEmail', 'newPass');
 
         db.user.findOne({
@@ -248,12 +248,52 @@ module.exports = function (app, _, middleware, db, bodyParser) {
         });
     });
 
+    /* DELETE users */
+    app.delete('/users', middleware.requireAuthentication, function (req, res) {
+        var body = _.pick(req.body, 'email', 'password');
+        var id = req.user.get('id');
+        var user;
+        
+        db.user.findOne({
+            "where": {
+                "id": id
+            }
+        }).then(function (matchedUser) {
+            if (!_.isNull(user)) {
+                user = matchedUser;
+               return  db.booking.destroy({
+                    "where": {
+                        "userId": id
+                    }
+                });
+            } else {
+                res.sendStatus(404).send('User not found.');
+            }
+        }).then(function (booking) {
+            console.log('Destroyed booking: ' + booking);
+           
+            db.user.destroy({
+                "where"   : {
+                    "id": req.user.get('id')
+                }
+            }).then(function (retVal) {
+                res.sendStatus(200).send(retVal);
+            }, function (err) {
+                console.log(err);
+                res.sendStatus(404).send('Done'+err);
+            });
+            
+        }, function (e) {
+            res.sendStatus(400).send(e);
+        });
+    });
+    
     /* DELETE /users/login */
     app.delete('/users/login', middleware.requireAuthentication, function (req, res) {
         req.token.destroy().then(function () {
-            res.status(204).send();
+            res.sendStatus(204).send();
         }).catch(function (err) {
-            res.status(500).send(err);
+            res.sendStatus(500).send(err);
         });
     });
 
