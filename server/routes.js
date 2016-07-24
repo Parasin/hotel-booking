@@ -222,15 +222,31 @@ module.exports = function (app, _, middleware, db, bodyParser) {
     });
 
     /* PUT users */
-    /*app.put('/users', function (req, res) {
-        var body = _.pick(req.body, 'email', 'password', 'firstName', 'lastName', 'dateOfBirth', 'vipStatus', 'frequentUser');
+    app.put('/users', function (req, res) {
+        var body = _.pick(req.body, 'email', 'password', 'newEmail', 'newPass');
 
-        db.user.update(body).then(function (user) {
-            res.json(user.toPublicJSON());
-        }).catch(function (err) {
-            res.status(400).send(err);
+        db.user.findOne({
+            "where": {
+                "email": body.email
+            }
+        }).then(function (user) {
+            if (!_.isNull(user)) {
+                body.email = body.newEmail;
+                body.password = body.newPass;
+                body = _.pick(body, 'email', 'password');
+                user.update(body).then(function (user) {
+                    user = _.pick(user, 'email', 'firstName', 'lastName', 'vipStatus', 'frequentUser')
+                    res.json(user);
+                }, function (e) {
+                    res.status(400).json(e);
+                });
+            } else {
+                res.status(404).send();
+            }
+        }, function (err) {
+            res.status(500).json(err);
         });
-    });*/
+    });
 
     /* DELETE /users/login */
     app.delete('/users/login', middleware.requireAuthentication, function (req, res) {

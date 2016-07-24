@@ -19,7 +19,6 @@ app.get('/', function (req, res) {
 app.use(bodyParser.json());
 require(__dirname + '/server/routes.js')(app, _, middleware, db, bodyParser);
 
-
 // Sync the database
 db.sequelize.sync( {force: true} ).then(function () {
     app.listen(PORT, function () {

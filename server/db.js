@@ -14,7 +14,6 @@ if (env === 'production') {
     });
 }
 
-
 var db = {};
 
 // Create the entities
