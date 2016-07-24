@@ -107,12 +107,38 @@ app.controller('registerController', ['$scope', '$location', 'authFactory', '$ti
         };
 }]);
 
-app.controller('profileController', ['$rootScope', '$scope', function ($rootScope, $scope) {
+app.controller('profileController', ['$rootScope', '$scope', 'authFactory', '$location', '$mdDialog', '$mdMedia', function ($rootScope, $scope, authFactory, $location, $mdDialog, $mdMedia) {
     $scope.userData = $rootScope.userData;
-    $scope.updatePass = function () {
+    $scope.updateEmail = false;
+    $scope.updatePass = false;
+    $scope.update = function () {
 
     };
+    $scope.error = false;
+    $scope.success = false;
+    $scope.confirmDelete = function(ev) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Confirm Account Deletion')
+          .textContent('Are you sure that you want to delete your account? This is permanent!')
+          .ariaLabel('Lucky day')
+          .targetEvent(ev)
+          .ok('Yes, delete my account')
+          .cancel('No, I want to keep my account');
 
+    $mdDialog.show(confirm).then(function() {
+        authFactory.delete($rootScope.userData).then(function (data) {
+            $scope.success = true;
+            $scope.error = false;
+            $rootScope.userData = null;
+            $scope.userData = null;
+            $location.path('/');
+            console.log('Account deleted successfully!');
+        });
+    }, function() {
+        
+    });
+  };
     //console.log($scope.userData);
 }]);
 

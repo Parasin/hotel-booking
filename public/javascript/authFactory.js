@@ -117,5 +117,60 @@ app.factory('authFactory', ['$q', '$timeout', '$http', '$cookies', function ($q,
         return deferred.promise;
     }
 
+    factory.update = function (data) {
+        // create a new instance of deferred
+        var deferred = $q.defer();
+        
+        var config = {
+            headers: {
+                'Content-type': 'application/json'
+                , 'Auth': $cookies.get('Auth')
+            }
+        };
+        
+        // send a put request to the server
+        $http.put('/users', data, config)
+            // handle success
+            .success(function (data, status, headers) {
+                userData = data;
+                deferred.resolve(data);
+            })
+            // handle error
+            .error(function (data, status, headers) {
+                deferred.reject(data);
+            });
+
+        // return promise object
+        return deferred.promise;
+    }
+    
+    factory.delete = function (data) {
+        // create a new instance of deferred
+        var deferred = $q.defer();
+
+        var config = {
+            headers: {
+                'Content-type': 'application/json'
+                , 'Auth': $cookies.get('Auth')
+            }
+        };
+        
+        // send a delete request to the server
+        $http.delete('/users', config).then(function(data, status) {
+            if (data.status === 200 || data.status === 204) {
+                $cookies.remove('Auth');
+                $cookies.remove('email');
+                user = false;
+                userData = {};
+                deferred.resolve(data);
+            } else {
+                deferred.reject(data);
+            }
+        });
+
+        // return promise object
+        return deferred.promise; 
+    }
+    
     return factory;
 }]);

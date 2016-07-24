@@ -39,6 +39,10 @@ and open the template in the editor.
     margin-top: 5px;
 }
 
+.disabled {
+    background-color: darkgray;
+}
+
 .row{
     margin-bottom: 30px;
     margin-top: 30px;
