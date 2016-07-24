@@ -157,21 +157,21 @@ module.exports = function (app, _, middleware, db, bodyParser) {
         var attributes = {};
         var bookingId = parseInt(req.params.id, 10);
 
-        if (query.hasOwnProperty('roomNumber')) {
+        if (body.hasOwnProperty('roomNumber')) {
             attributes.roomNumber = body.roomNumber;
         }
-        if (query.hasOwnProperty('bookedBy')) {
+        if (body.hasOwnProperty('bookedBy')) {
             attributes.bookedBy = body.bookedBy;
         }
 
-        if (query.hasOwnProperty('endDate')) {
+        if (body.hasOwnProperty('endDate')) {
             attributes.endDate = body.endDate;
         }
-        if (query.hasOwnProperty('startDate')) {
-            attributes.startDate = body.StartDate;
+        if (body.hasOwnProperty('startDate')) {
+            attributes.startDate = body.startDate;
         }
 
-        db.booking.findByOne({
+        db.booking.findOne({
             "where": {
                 "id": bookingId
                 , "userId": req.user.get('id')
