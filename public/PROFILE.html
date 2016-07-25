@@ -8,75 +8,32 @@
 <!-- My Profile values -->
 
 <div id="profile_header" class="col-xs-6 col-xs-offset-3">
-    
-    <!-- TODO:
-        ** William: Please see the section below the form, this should be how we access live data
-                    for the logged in user. Currently, this is the only data available. We can use
-                    a form to submit password changes though. 
-
-                    The section that I (Evan) created needs some better formatting to look nice on the page
-                    could you create the CSS or necessary changes to update the presentation of the data?
-
-        1. Display actual values?
-        2. Action buttons to change values?
-    -->
-    
-    <!--<form class="form-horizontal" role="form">
-        
-         <div class="form-group">
-             <label for="username">Username</label>
-             <input type="text" class="form-control" id="username" value={{user.data.email}} readonly>
-         </div>
-        
-         <div class="form-group">
-             <label for="firstName">First Name</label>
-             <input type="text" class="form-control" id="firstName" ng-model="firstName">
-         </div>  
-        
-         <div class="form-group">
-             <label for="lastName">Last Name</label>
-             <input type="text" class="form-control" id="lastName" ng-model="lastName">
-         </div>
-        
-         <div class="form-group">
-             <label for="dob">Date of Birth</label>
-             <input type="date" class="form-control" id="dob" ng-model="dateOfBirth">
-         </div>
-        
-         <div class="form-group">
-             <label for="frequent_user">Frequent User</label>
-             <input type="text" class="form-control" id="frequent_user" ng-model="frequentUser" readonly>
-         </div>
-        
-         <div class="form-group">
-             <label for="vipStatus">VIP Status</label>
-             <input type="text" class="form-control" id="vipStatus" ng-model="vipStatus" readonly>
-         </div>
-        
-         <div class="form-group">
-             <label for="email">Email</label>
-             <input type="text" class="form-control" id="email" ng-model="email">
-         </div>
-        
-         <div class="form-group">
-             <label for="pwd">Change Password</label>
-             <input type="password" class="form-control" id="pwd" data-toggle="password">
-         </div>
-        
-    </form>-->
     <div ng-cloak>
         <div class="row">
             <div class="col-md-1 pull-left" style="background-color: darkgray; height: 100px; width: 100px"></div>
             <div class="col-md-8">
                 <md-input-container class="md-block">
                     <label>Email</label>
-                    <input name="email" ng-model="userData.email" type="email" ng-class="{disabled: !updateEmail}" ng-disabled="!updateEmail">
+                    <input name="email" ng-model="newEmail" type="email" ng-class="{disabled: !updateEmail}" ng-disabled="!updateEmail">
                 </md-input-container>
             </div>
             <div flex-xs="" flex="50" class="col-md-2">
                 <md-input-container>
                     <md-checkbox md-no-ink="" class="md-primary" ng-model="updateEmail"><span style="color: saddlebrown">Click to update email</span></md-checkbox>
                 </md-input-container>
+            </div>
+            <div class="row">
+                <div class="col-md-8" style="margin-right: -20px">
+                    <md-input-container class="md-block">
+                        <label>New Password</label>
+                        <input name="password" ng-model="newPass" type="password" ng-class="{disabled: !updatePass}" ng-disabled="!updatePass" ng-minlength="7">
+                    </md-input-container>
+                </div>
+                <div flex-xs="" flex="50" class="col-md-2">
+                    <md-input-container>
+                        <md-checkbox md-no-ink="" class="md-primary" ng-model="updatePass"><span style="color: saddlebrown">Click to update Password</span></md-checkbox>
+                    </md-input-container>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -95,13 +52,13 @@
             <div class="col-md-4">
                 <md-input-container class="md-block">
                     <label>Date of Birth</label>
-                    <input name="lastName" ng-model="userData.dateOfBirth" type="text" readonly>
+                    <input name="lastName" ng-model="userData.dateOfBirth | date:'longDate'" type="text" readonly>
                 </md-input-container>
             </div>
         </div>
         <div class="row">
             <div class="col-md-4">
-                <md-button class="md-raised md-primary" ng-disabled="!updateEmail && !updatePass">Update Profile</md-button>
+                <md-button class="md-raised md-primary" ng-disabled="!updateEmail && !updatePass" ng-click="update()">Update Profile</md-button>
             </div>
             <div class="col-md-4 col-md-offset-4">
                 <md-button class="md-raised md-warn" ng-click="confirmDelete($event)">Delete Profile</md-button>

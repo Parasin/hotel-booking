@@ -241,7 +241,7 @@ module.exports = function (app, _, middleware, db, bodyParser) {
                     res.status(400).json(e);
                 });
             } else {
-                res.status(404).send();
+                res.status(404).send('User does not exist');
             }
         }, function (err) {
             res.status(500).json(err);

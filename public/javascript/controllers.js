@@ -109,13 +109,34 @@ app.controller('registerController', ['$scope', '$location', 'authFactory', '$ti
 
 app.controller('profileController', ['$rootScope', '$scope', 'authFactory', '$location', '$mdDialog', '$mdMedia', function ($rootScope, $scope, authFactory, $location, $mdDialog, $mdMedia) {
     $scope.userData = $rootScope.userData;
+    $scope.newPass = '';
+    $scope.newEmail = $scope.userData.email;
     $scope.updateEmail = false;
     $scope.updatePass = false;
-    $scope.update = function () {
-
-    };
     $scope.error = false;
     $scope.success = false;
+    $scope.update = function () {
+        var data = $scope.userData;
+        if ($scope.updateEmail) {
+            data.newEmail = $scope.newEmail;
+        }
+        if ($scope.updatePass) {
+            data.newPass = $scope.newPass;
+        }
+        authFactory.update(data).then(function (res) {
+            console.log('Successfully updated account info: ' + res);
+            $scope.success = true;
+            $scope.error = false;
+            $scope.updateEmail = false;
+            $scope.updatePass = false;
+            $rootScope.userData = res;
+            $scope.userData = $rootScope.userData;
+        }, function (err) {
+            console.log('Error updating account info:  ' + err)
+            $scope.success = false;
+            $scope.error = true;
+        });
+    };
     $scope.confirmDelete = function(ev) {
     // Appending dialog to document.body to cover sidenav in docs app
     var confirm = $mdDialog.confirm()
