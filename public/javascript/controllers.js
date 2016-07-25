@@ -117,25 +117,36 @@ app.controller('profileController', ['$rootScope', '$scope', 'authFactory', '$lo
     $scope.success = false;
     $scope.update = function () {
         var data = $scope.userData;
-        if ($scope.updateEmail) {
+        var valid = false;
+        if ($scope.updateEmail && $scope.newEmail.length > 4) {
             data.newEmail = $scope.newEmail;
+            valid = true;
         }
-        if ($scope.updatePass) {
+        else {
+            valid = false;
+        }
+        if ($scope.updatePass && $scope.newPass.length >= 7) {
             data.newPass = $scope.newPass;
+            valid = true;
         }
-        authFactory.update(data).then(function (res) {
-            console.log('Successfully updated account info: ' + res);
-            $scope.success = true;
-            $scope.error = false;
-            $scope.updateEmail = false;
-            $scope.updatePass = false;
-            $rootScope.userData = res;
-            $scope.userData = $rootScope.userData;
-        }, function (err) {
-            console.log('Error updating account info:  ' + err)
-            $scope.success = false;
-            $scope.error = true;
-        });
+        else {
+            valid = false;
+        }
+        if (valid) {
+            authFactory.update(data).then(function (res) {
+                console.log('Successfully updated account info: ' + res);
+                $scope.success = true;
+                $scope.error = false;
+                $scope.updateEmail = false;
+                $scope.updatePass = false;
+                $rootScope.userData = res;
+                $scope.userData = $rootScope.userData;
+            }, function (err) {
+                console.log('Error updating account info:  ' + err);
+                $scope.success = false;
+                $scope.error = true;
+            });
+        }  
     };
     $scope.confirmDelete = function(ev) {
     // Appending dialog to document.body to cover sidenav in docs app

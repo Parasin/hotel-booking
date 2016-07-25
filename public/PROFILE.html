@@ -10,6 +10,12 @@
 <div id="profile_header" class="col-xs-6 col-xs-offset-3">
     <div ng-cloak>
         <div class="row">
+            <div class="col-md-12">
+                <p class="alert alert-success" ng-show="success">Account updated successfully</p>
+                <p class="alert alert-danger" ng-show="error">Error updating account</p>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-md-1 pull-left" style="background-color: darkgray; height: 100px; width: 100px"></div>
             <div class="col-md-8">
                 <md-input-container class="md-block">
@@ -58,7 +64,7 @@
         </div>
         <div class="row">
             <div class="col-md-4">
-                <md-button class="md-raised md-primary" ng-disabled="!updateEmail && !updatePass" ng-click="update()">Update Profile</md-button>
+                <md-button class="md-raised md-primary" ng-disabled="!(updateEmail || updatePass)" ng-click="update()">Update Profile</md-button>
             </div>
             <div class="col-md-4 col-md-offset-4">
                 <md-button class="md-raised md-warn" ng-click="confirmDelete($event)">Delete Profile</md-button>
