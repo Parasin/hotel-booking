@@ -118,23 +118,35 @@ app.controller('profileController', ['$rootScope', '$scope', 'authFactory', '$lo
     $scope.update = function () {
         var data = $scope.userData;
         var valid = false;
-        if ($scope.updateEmail && $scope.newEmail.length > 4) {
-            data.newEmail = $scope.newEmail;
-            valid = true;
+        if ($scope.updateEmail) {
+            if($scope.newEmail.length > 4) {
+                data.newEmail = $scope.newEmail;
+                valid = true;
+            }
+            else {
+                valid = false;
+            }
         }
         else {
-            valid = false;
-        }
-        if ($scope.updatePass && $scope.newPass.length >= 7) {
-            data.newPass = $scope.newPass;
+            data.newEmail = $scope.userData.email;
             valid = true;
         }
+        if ($scope.updatePass) {
+            if($scope.newPass.length >= 7) {
+                data.newPass = $scope.newPass;
+                valid = true;
+            }
+            else {
+                valid = false;
+            }
+        }
         else {
-            valid = false;
+            data.newPass = $scope.userData.password;
+            valid = true;
         }
         if (valid) {
             authFactory.update(data).then(function (res) {
-                console.log('Successfully updated account info: ' + res);
+                console.log('Successfully updated account info: ' + JSON.stringify(res));
                 $scope.success = true;
                 $scope.error = false;
                 $scope.updateEmail = false;
@@ -171,7 +183,6 @@ app.controller('profileController', ['$rootScope', '$scope', 'authFactory', '$lo
         
     });
   };
-    //console.log($scope.userData);
 }]);
 
 

@@ -226,6 +226,9 @@ module.exports = function (app, _, middleware, db) {
         if(!body.hasOwnProperty('newEmail')) {
             body.newEmail = body.email;
         }
+        if(!body.hasOwnProperty(('newPass'))) {
+            body.newPass = body.password
+        }
         db.user.findOne({
             "where": {
                 "email": body.email
