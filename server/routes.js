@@ -1,6 +1,4 @@
-var bcrypt = require('bcryptjs');
-
-module.exports = function (app, _, middleware, db, bodyParser) {
+module.exports = function (app, _, middleware, db) {
     /* Get individual booking */
     app.get('/bookings/user/:id', middleware.requireAuthentication, function (req, res) {
         var bookingId = parseInt(req.params.id, 10);
@@ -118,7 +116,7 @@ module.exports = function (app, _, middleware, db, bodyParser) {
                     res.status(400).json(err);
                 });
             }
-        }, function (err) {
+        }, function () {
             res.status(404).send({
                 error: 'Room not available'
             });
@@ -195,10 +193,18 @@ module.exports = function (app, _, middleware, db, bodyParser) {
     /* POST users */
     app.post('/users', function (req, res) {
         var body = _.pick(req.body, 'email', 'password', 'firstName', 'lastName', 'dateOfBirth', 'vipStatus', 'frequentUser');
-
+        var retUser;
         db.user.create(body).then(function (user) {
-            res.json(user.toPublicJSON());
+            retUser = user;
+            return db.sequelize.query('DROP VIEW IF EXISTS user' + user.id +'_bookings; CREATE VIEW `user' + user.id + '_bookings` AS ' +
+            'SELECT id, bookedBy, roomNumber, startDate, endDate, userId ' +
+            'FROM bookings ' +
+            'WHERE userId=' + user.id + ';', {model: db.bookings});
+        }).then(function (resp) {
+            console.log(JSON.stringify((resp)));
+            res.send(retUser.toPublicJSON);
         }).catch(function (err) {
+            console.log(err);
             res.status(400).send(err);
         });
     });
@@ -235,7 +241,7 @@ module.exports = function (app, _, middleware, db, bodyParser) {
                 body.password = body.newPass;
                 body = _.pick(body, 'email', 'password');
                 user.update(body).then(function (user) {
-                    user = _.pick(user, 'email', 'firstName', 'lastName', 'vipStatus', 'frequentUser')
+                    user = _.pick(user, 'email', 'firstName', 'lastName', 'vipStatus', 'frequentUser');
                     res.json(user);
                 }, function (e) {
                     res.status(400).json(e);
@@ -301,7 +307,7 @@ module.exports = function (app, _, middleware, db, bodyParser) {
     app.post('/rooms', middleware.requireAuthentication, function (req, res) {
         var body = _.pick(req.body, 'roomType', 'pricePerNight', 'inService', 'hotelId', 'view', 'numBath', 'numBed', 'kitchen');
 
-        db.room.create(body).then(function (room) {
+        db.room.create(body).then(function () {
             res.send(body);
         }).catch(function (err) {
             res.status(400).send(err);

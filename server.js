@@ -23,7 +23,6 @@ require(__dirname + '/server/routes.js')(app, _, middleware, db, bodyParser);
 db.sequelize.sync( {force: true} ).then(function () {
     app.listen(PORT, function () {
         console.log('Express listening on port ' + PORT);
-        
         db.user.bulkCreate(data.users).then(function () {
             console.log('\nUsers inserted successfully\n');
             return db.hotel.bulkCreate(data.hotels);
@@ -35,6 +34,11 @@ db.sequelize.sync( {force: true} ).then(function () {
             return db.booking.bulkCreate(data.bookings);
         }).then(function () {
             console.log('\nBookings inserted successfully\n');
+            return db.sequelize.query('CREATE VIEW `user_bookings` AS ' +
+                'SELECT id, bookedBy, roomNumber, startDate, endDate, userId ' +
+                'FROM bookings', {model: db.bookings});
+        }).then(function (res) {
+            console.log('\nuser_bookings view created successfully\n');
         });
     });
 });
