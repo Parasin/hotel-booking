@@ -190,19 +190,12 @@ module.exports = function (app, _, middleware, db) {
     });
 
 
-    /* POST users */
+    /* POST register users */
     app.post('/users', function (req, res) {
         var body = _.pick(req.body, 'email', 'password', 'firstName', 'lastName', 'dateOfBirth', 'vipStatus', 'frequentUser');
-        var retUser;
         db.user.create(body).then(function (user) {
-            retUser = user;
-            return db.sequelize.query('DROP VIEW IF EXISTS user' + user.id +'_bookings; CREATE VIEW `user' + user.id + '_bookings` AS ' +
-            'SELECT id, bookedBy, roomNumber, startDate, endDate, userId ' +
-            'FROM bookings ' +
-            'WHERE userId=' + user.id + ';', {model: db.bookings});
-        }).then(function (resp) {
-            console.log(JSON.stringify((resp)));
-            res.send(retUser.toPublicJSON);
+            console.log(JSON.stringify((user)));
+            res.send(user.toPublicJSON);
         }).catch(function (err) {
             console.log(err);
             res.status(400).send(err);
@@ -230,10 +223,12 @@ module.exports = function (app, _, middleware, db) {
     /* PUT users */
     app.put('/users', middleware.requireAuthentication, function (req, res) {
         var body = _.pick(req.body, 'email', 'password', 'newEmail', 'newPass');
-
+        if(!body.hasOwnProperty('newEmail')) {
+            body.newEmail = body.email;
+        }
         db.user.findOne({
             "where": {
-                "email": body.email
+                "email": body.emails
             }
         }).then(function (user) {
             if (!_.isNull(user)) {

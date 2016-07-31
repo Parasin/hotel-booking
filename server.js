@@ -34,11 +34,16 @@ db.sequelize.sync( {force: true} ).then(function () {
             return db.booking.bulkCreate(data.bookings);
         }).then(function () {
             console.log('\nBookings inserted successfully\n');
+            return db.sequelize.query('DROP VIEW IF EXISTS user_bookings');
+        }).then(function (res) {
+            console.log('\nuser_bookings view dropped successfully\n');
             return db.sequelize.query('CREATE VIEW `user_bookings` AS ' +
                 'SELECT id, bookedBy, roomNumber, startDate, endDate, userId ' +
                 'FROM bookings', {model: db.bookings});
         }).then(function (res) {
             console.log('\nuser_bookings view created successfully\n');
+        }).catch(function (err) {
+            console.log('Error initializing data: ' + err);
         });
     });
 });
