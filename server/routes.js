@@ -228,7 +228,7 @@ module.exports = function (app, _, middleware, db) {
         }
         db.user.findOne({
             "where": {
-                "email": body.emails
+                "email": body.email
             }
         }).then(function (user) {
             if (!_.isNull(user)) {
