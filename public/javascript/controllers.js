@@ -194,10 +194,11 @@ app.controller('bookingController', ['$resource', '$log', '$rootScope', '$scope'
     };
     $scope.error = '';
     $scope.$watch('rooms.array', function () {});
-    $scope.$on('$locationChangeStart', function(ev) {
-        ev.preventDefault();
-    });
+
     $scope.searchBookings = function () {
+        $scope.$on('$locationChangeStart', function(ev) {
+            ev.preventDefault();
+        });
         if ($scope.kitchen === 'Yes') {
             $scope.kitchen = 1;
         }
