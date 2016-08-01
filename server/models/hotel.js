@@ -1,10 +1,10 @@
 module.exports = function (sequelize, DataTypes) {
     return sequelize.define('hotel', {
         "phoneNo": {
-            "type": DataTypes.INTEGER
+            "type": DataTypes.STRING
             , "allowNull": false
             , "validate": {
-                "isNumeric": true
+                "isAlphanumeric": true
                 , "len": [10, 12]
             }
         }
