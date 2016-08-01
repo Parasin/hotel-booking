@@ -190,13 +190,11 @@ app.controller('bookingController', ['$resource', '$log', '$rootScope', '$scope'
     $scope.numBed;
     $scope.kitchen;
     $scope.view;
-    var changed =  false;
     $scope.rooms = {
         array: []
     };
-    var data = [];
     $scope.error;
-    $scope.$watch('rooms.array', function () {console.log('Rooms retrieved!')});
+    $scope.$watch('rooms.array', function () {});
     $scope.$on('$locationChangeStart', function(ev) {
         ev.preventDefault();
     });
@@ -211,29 +209,15 @@ app.controller('bookingController', ['$resource', '$log', '$rootScope', '$scope'
             $scope.kitchen = null;
         }
 
-        var roomType = $scope.roomType;
-        var pricePerNight = $scope.price;
-        var kitchen = $scope.kitchen;
-        var view = $scope.view;
-        var numBed = $scope.numBed;
-        var defaults;
         $location.search({
-            roomType: roomType
-            , pricePerNight: pricePerNight
-            , kitchen: kitchen
-            , view: view
-            , numBed: numBed
+            roomType: $scope.roomType
+            , pricePerNight: $scope.price
+            , kitchen: $scope.kitchen
+            , view: $scope.view
+            , numBed: $scope.numBed
         });
 
-        defaults = {
-            roomType: ['Single Suite', 'Double Suite', 'Economy Suite', 'Presidential Suite', 'Honeymoon Suite']
-            , pricePerNight: 5000
-            , kitchen: [0, 1]
-            , view: ['Courtyard', 'Skyline', 'Beachfront']
-            , numBed: [1, 2, 3]
-        };
-        var query = $location.search()
-        console.log(JSON.stringify(query));
+        var query = $location.search();
         var Rooms =  $resource('/bookings/?', query, {
             save: {
                 method: 'POST'
@@ -246,7 +230,6 @@ app.controller('bookingController', ['$resource', '$log', '$rootScope', '$scope'
 
         Rooms.save().$promise.then(function (result) {
             $scope.error = null;
-            $log.info('Num rooms: ' + data.length);
             $scope.rooms.array = [];
             for (var i = 0; i < result.length; i++) {
                 $scope.rooms.array.push(result[i]);
