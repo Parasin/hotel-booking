@@ -23,11 +23,11 @@ module.exports = function (app, _, middleware, db) {
     });
 
     /* GET all available bookings */
-    app.get('/bookings', middleware.requireAuthentication, function (req, res) {
-        var query = _.pick(req.query, 'endDate', 'startDate', 'availability', 'roomNumber', 'pricePerNight', 'roomType', 'numBed');
+    app.post('/bookings', middleware.requireAuthentication, function (req, res) {
+        var query = _.pick(req.query, 'endDate', 'startDate', 'availability', 'roomNumber', 'pricePerNight', 'roomType', 'numBed', 'view', 'kitchen');
         var where = {};
         var rooms = {};
-
+        console.log(JSON.stringify(query));
         if (query.hasOwnProperty('roomNumber')) {
             where.roomNumber = query.roomNumber;
         }
@@ -41,6 +41,18 @@ module.exports = function (app, _, middleware, db) {
         }
         if (query.hasOwnProperty('numBed')) {
             where.numBed = query.numBed;
+        }
+        if (query.hasOwnProperty('view')) {
+            where.view = query.view;
+        }
+        if (query.hasOwnProperty('kitchen')) {
+            where.kitchen = query.kitchen;
+        }
+        if (query.hasOwnProperty('startDate')) {
+            where.startDate = query.startDate;
+        }
+        if (query.hasOwnProperty('endDate')) {
+            where.startDate = query.endDate;
         }
         where.inService = 1;
 

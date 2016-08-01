@@ -1,6 +1,6 @@
 <div class="container-fluid home row">
     <div class="col-xs-6 col-xs-offset-3 col-md-10 col-md-offset-1" style="padding: 1em 2em">
-        <form ng-submit="searchBookings()">
+        <form  data-remote=true>
             <div class="col-xs-12 col-md-2" >
                 <md-input-container>
                     <md-select ng-model="numBed" placeholder="Number of Beds">
@@ -62,7 +62,7 @@
                         <input type="date" class="form-control" ng-model="endDate">
                     </div>
                     <div class="col-md-2">
-                        <input type="submit" value="Search" class="btn btn-primary"></input>
+                        <button type="button" value="Search" class="btn btn-primary btn-block" ng-click="searchBookings()">Search</button>
                     </div>
                     
                 </div>
@@ -97,18 +97,5 @@
                 </tbody>
             </table>
     	</div>
-    </div>
-</div>
-<p>{{rooms.array}}</p>
-<div class="container-fluid row">
-    <div class="col-md-12">
-        <div ng-repeat="room in rooms.array">
-            <p>Room number: {{room.id}}</p>
-            <p>Room Type: {{room.roomType}}</p>
-            <p>Beds: {{room.numBed}}</p>
-            <p>Kitchen: {{room.kitchen}}</p>
-            <p>View: {{room.view}}</p>
-            <p>$: {{room.pricePerNight}}</p>
-        </div>
     </div>
 </div>

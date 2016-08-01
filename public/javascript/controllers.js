@@ -46,11 +46,7 @@ app.controller('loginController', ['$rootScope', '$scope', '$location', 'authFac
 }]);
 
 /* Register controller */
-app.controller('registerController', ['$scope', '$location', 'authFactory', '$timeout'
-
-
-    
-    , function ($scope, $location, authFactory, $timeout) {
+app.controller('registerController', ['$scope', '$location', 'authFactory', '$timeout', function ($scope, $location, authFactory, $timeout) {
         $scope.email;
         $scope.password;
         $scope.confirmPassword;
@@ -188,66 +184,76 @@ app.controller('profileController', ['$rootScope', '$scope', 'authFactory', '$lo
 
 app.controller('bookingController', ['$resource', '$log', '$rootScope', '$scope', '$mdSidenav', '$q', '$http', '$location', '$cookies', function ($resource, $log, $rootScope, $scope, $mdSidenav, $q, $http, $location, $cookies) {
     $scope.price = 500;
-    $scope.startDate = '';
-    $scope.endDate = '';
-    $scope.roomType = '';
-    $scope.numBed = 1;
-    $scope.kitchen = '';
-    $scope.view = '';
+    $scope.startDate;
+    $scope.endDate;
+    $scope.roomType;
+    $scope.numBed;
+    $scope.kitchen;
+    $scope.view;
     var changed =  false;
     $scope.rooms = {
         array: []
     };
     var data = [];
     $scope.error;
+    $scope.$watch('rooms.array', function () {console.log('Rooms retrieved!')});
+    $scope.$on('$locationChangeStart', function(ev) {
+        ev.preventDefault();
+    });
     $scope.searchBookings = function () {
         if ($scope.kitchen === 'Yes') {
             $scope.kitchen = 1;
-        } else {
+        }
+        else if ($scope.kitchen === 'No') {
             $scope.kitchen = 0;
         }
+        else {
+            $scope.kitchen = null;
+        }
 
+        var roomType = $scope.roomType;
+        var pricePerNight = $scope.price;
+        var kitchen = $scope.kitchen;
+        var view = $scope.view;
+        var numBed = $scope.numBed;
+        var defaults;
         $location.search({
-            roomType: $scope.roomType || ['Single Suite', 'Double Suite', 'Economy Suite', 'Presidential Suite', 'Honeymoon Suite']
-            , pricePerNight: $scope.price || 5000
-            , kitchen: $scope.kitchen || [0, 1]
-            , view: $scope.view || ['Courtyard', 'Skyline', 'Beachfront']
-            , numBed: $scope.numBed || [1, 2, 3]
+            roomType: roomType
+            , pricePerNight: pricePerNight
+            , kitchen: kitchen
+            , view: view
+            , numBed: numBed
         });
 
-        
-        var Rooms =  $resource('/bookings/?', $location.search(), {
-            query: {
-                method: 'GET'
+        defaults = {
+            roomType: ['Single Suite', 'Double Suite', 'Economy Suite', 'Presidential Suite', 'Honeymoon Suite']
+            , pricePerNight: 5000
+            , kitchen: [0, 1]
+            , view: ['Courtyard', 'Skyline', 'Beachfront']
+            , numBed: [1, 2, 3]
+        };
+        var query = $location.search()
+        console.log(JSON.stringify(query));
+        var Rooms =  $resource('/bookings/?', query, {
+            save: {
+                method: 'POST'
                 , isArray: true
                 , headers: {
                     Auth: $cookies.get('Auth')
                 }
             }
         });
-        
-        /*request($location.url())*/
-        /*$http(req)*/
-        Rooms.query().$promise.then(function (result) {
-            data = result;
+
+        Rooms.save().$promise.then(function (result) {
             $scope.error = null;
-            changed = true;
-            $log.debug('Value of changed: ' + changed);
-            $log.debug('Result: ' + JSON.stringify(result));
-            //$scope.rooms.array = result;
-            //$scope.$apply();
-            //$log.info('Success: ' + JSON.stringify($scope.rooms.array));
             $log.info('Num rooms: ' + data.length);
-            $scope.$watch(changed, function () {
-                
-                    $log.debug('WE CHANGED ROOMS ARRAY');
-                    $scope.rooms.array = data;
-                    $log.debug('ROOMS ARR: ' + JSON.stringify($scope.rooms.array));
-                
-            });
+            $scope.rooms.array = [];
+            for (var i = 0; i < result.length; i++) {
+                $scope.rooms.array.push(result[i]);
+            }
+            $log.debug('ROOMS ARR: ' + JSON.stringify($scope.rooms.array));
         }, function (err) {
             $scope.error = err.data.error;
-            //$log.error('Error retrieving bookings: ' + JSON.stringify(err.data));
         });  
     };
 }]);
