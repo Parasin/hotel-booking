@@ -3,8 +3,7 @@ app.controller('homeController', ['$scope', '$resource', '$location', 'authentic
 }]);
 
 /* Main controller */
-app.controller('navController', ['$scope', '$location', 'authFactory', function ($scope, $location, authFactory) {
-    // $scope.logoutEnabled = authFactory.isLoggedIn();
+app.controller('navController', ['$scope', '$location', 'authFactory', function ($scope, $location) {
     $scope.isActive = function (viewLocation) {
         return viewLocation === $location.path();
     };
@@ -12,8 +11,8 @@ app.controller('navController', ['$scope', '$location', 'authFactory', function 
 
 /* Login controller */
 app.controller('loginController', ['$rootScope', '$scope', '$location', 'authFactory', '$cookies', '$route', '$timeout', function ($rootScope, $scope, $location, authFactory, $cookies, $route, $timeout) {
-    $scope.error;
-    $scope.errorMessage;
+    $scope.error = null;
+    $scope.errorMessage = null;
     $scope.processing = false;
     $scope.login = function () {
         // initial values
@@ -31,7 +30,7 @@ app.controller('loginController', ['$rootScope', '$scope', '$location', 'authFac
                     $scope.processing = false;
                     $location.path('/bookings');
                 });
-            }, function (err) {
+            }, function () {
                 $scope.processing = false;
                 $scope.error = true;
                 $scope.errorMessage = "Invalid username and/or password";
@@ -47,13 +46,13 @@ app.controller('loginController', ['$rootScope', '$scope', '$location', 'authFac
 
 /* Register controller */
 app.controller('registerController', ['$scope', '$location', 'authFactory', '$timeout', function ($scope, $location, authFactory, $timeout) {
-        $scope.email;
-        $scope.password;
-        $scope.confirmPassword;
-        $scope.dateOfBirth;
-        $scope.firstName;
-        $scope.lastName;
-        $scope.processing;
+        $scope.email = '';
+        $scope.password = '';
+        $scope.confirmPassword = '';
+        $scope.dateOfBirth = '';
+        $scope.firstName = '';
+        $scope.lastName = '';
+        $scope.processing = '';
         $scope.register = function () {
             $scope.processing = true;
             // initial values
@@ -75,7 +74,7 @@ app.controller('registerController', ['$scope', '$location', 'authFactory', '$ti
 
             authFactory.register(data)
                 // handle success
-                .then(function (data) {
+                .then(function () {
                     $scope.success = true;
                     $scope.processing = false;
                     $timeout(function () {
@@ -103,7 +102,7 @@ app.controller('registerController', ['$scope', '$location', 'authFactory', '$ti
         };
 }]);
 
-app.controller('profileController', ['$rootScope', '$scope', 'authFactory', '$location', '$mdDialog', '$mdMedia', function ($rootScope, $scope, authFactory, $location, $mdDialog, $mdMedia) {
+app.controller('profileController', ['$rootScope', '$scope', 'authFactory', '$location', '$mdDialog', function ($rootScope, $scope, authFactory, $location, $mdDialog) {
     $scope.userData = $rootScope.userData;
     $scope.newPass = '';
     $scope.newEmail = $scope.userData.email;
@@ -167,7 +166,7 @@ app.controller('profileController', ['$rootScope', '$scope', 'authFactory', '$lo
           .cancel('No, I want to keep my account');
 
     $mdDialog.show(confirm).then(function() {
-        authFactory.delete($rootScope.userData).then(function (data) {
+        authFactory.delete($rootScope.userData).then(function () {
             $scope.success = true;
             $scope.error = false;
             $rootScope.userData = null;
@@ -184,16 +183,16 @@ app.controller('profileController', ['$rootScope', '$scope', 'authFactory', '$lo
 
 app.controller('bookingController', ['$resource', '$log', '$rootScope', '$scope', '$mdSidenav', '$q', '$http', '$location', '$cookies', function ($resource, $log, $rootScope, $scope, $mdSidenav, $q, $http, $location, $cookies) {
     $scope.price = 500;
-    $scope.startDate;
-    $scope.endDate;
-    $scope.roomType;
-    $scope.numBed;
-    $scope.kitchen;
-    $scope.view;
+    $scope.startDate = null;
+    $scope.endDate = null;
+    $scope.roomType = null;
+    $scope.numBed = null;
+    $scope.kitchen = null;
+    $scope.view = null;
     $scope.rooms = {
         array: []
     };
-    $scope.error;
+    $scope.error = '';
     $scope.$watch('rooms.array', function () {});
     $scope.$on('$locationChangeStart', function(ev) {
         ev.preventDefault();
@@ -242,7 +241,7 @@ app.controller('bookingController', ['$resource', '$log', '$rootScope', '$scope'
 }]);
 
 /* Logout controller */
-app.controller('logoutController', ['$scope', '$location', 'authFactory', '$cookies', function ($scope, $location, authFactory, $cookies) {
+app.controller('logoutController', ['$scope', '$location', 'authFactory', function ($scope, $location, authFactory) {
     $scope.logout = function () {
         if (!authFactory.isLoggedIn()) {
             return;
